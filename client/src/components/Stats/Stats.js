@@ -4,7 +4,7 @@ import React, { Component } from "react";
 class Stats extends Component {
     render() {
         return (
-            <div className="uk-section uk-section-default uk-margin-large-top uk-padding-remove-top">
+            <div className="uk-section uk-section-default uk-width-expand uk-margin-large-top uk-padding-remove-top">
                 <p className="uk-margin-small-top uk-margin-small-left uk-margin-medium-bottom">Your Stats</p>
                 <div className="uk-text-center uk-flex uk-flex-around uk-flex-middle">
                     <div>

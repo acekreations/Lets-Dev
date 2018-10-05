@@ -25,7 +25,7 @@ class NavBar extends Component {
                 </div>
                 <div className="uk-navbar-right">
                     <ul className="uk-navbar-nav uk-flex-middle">
-                        <li>{this.props.name}</li>
+                        <li><Link to={"/profile/" + this.props.username} className="uk-link-reset">{this.props.name}</Link></li>
                         <li><div className="profile-image"></div></li>
                     </ul>
                 </div>
