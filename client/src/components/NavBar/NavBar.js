@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import "./NavBar.css";
 
 class NavBar extends Component {
@@ -10,10 +11,10 @@ class NavBar extends Component {
                     <ul className="uk-navbar-nav">
                         <li>
                             <a href="#"><span uk-icon="icon: menu; ratio: 1.3"></span></a>
-                            <div className="uk-navbar-dropdown" uk-drop="mode: click; offset: -15;">
-                                <ul className="uk-nav uk-navbar-dropdown-nav">
-                                    <li><a href="#">Home</a></li>
-                                    <li><a href="#">Friends</a></li>
+                            <div className="uk-navbar-dropdown" uk-dropdown="mode: click; offset: -15; flip: true;">
+                                <ul className="uk-nav uk-dropdown-nav">
+                                    <li><Link to={"/"}>Home</Link></li>
+                                    <li><Link to={"friends"}>Friends</Link></li>
                                 </ul>
                             </div>
                         </li>
@@ -24,7 +25,7 @@ class NavBar extends Component {
                 </div>
                 <div className="uk-navbar-right">
                     <ul className="uk-navbar-nav uk-flex-middle">
-                        <li>Craig Melville</li>
+                        <li>{this.props.name}</li>
                         <li><div className="profile-image"></div></li>
                     </ul>
                 </div>
