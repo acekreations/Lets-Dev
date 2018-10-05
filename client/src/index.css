@@ -17,3 +17,10 @@ h1, h2, h3, h4, h5, p, span {
     font-weight: 500;
     margin: 0px;
 }
+
+.profileImage {
+    max-width: none !important;
+    width: 50px !important;
+    height: 50px;
+    border-radius: 100px;
+}
