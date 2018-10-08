@@ -14,7 +14,7 @@ class NavBar extends Component {
                             <div className="uk-navbar-dropdown" uk-dropdown="mode: click; offset: -15; flip: true;">
                                 <ul className="uk-nav uk-dropdown-nav">
                                     <li><Link to={"/"}>Home</Link></li>
-                                    <li><Link to={"friends"}>Friends</Link></li>
+                                    <li><Link to={"/friends"}>Friends</Link></li>
                                 </ul>
                             </div>
                         </li>

@@ -16,7 +16,7 @@ class Rank extends Component {
                 <tbody>
                     <tr>
                         <td className="uk-width-auto">{this.props.rank}</td>
-                        <td className="uk-width-auto"><img className="profileImage" src={this.props.profileImage}></img></td>
+                        <td className="uk-width-auto"><img className="profileImage" alt="profile" src={this.props.profileImage}></img></td>
                         <td className="uk-width-expand uk-text-left"><Link to={"/"} className="uk-link-reset">{this.props.name}</Link></td>
                         <td className="uk-width-auto uk-text-right">{this.props.activity}</td>
                     </tr>

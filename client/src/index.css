@@ -18,7 +18,7 @@ a:hover {
     text-decoration: underline !important;
 }
 
-h1, h2, h3, h4, h5, p, span, th {
+h1, h2, h3, h4, h5, p, span, th, input {
     color: #000 !important;
     font-family: 'K2D', sans-serif;
     font-weight: 500;

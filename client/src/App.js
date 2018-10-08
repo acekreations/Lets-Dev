@@ -3,6 +3,7 @@ import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import NavBar from "./components/NavBar";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
+import Friends from "./pages/Friends";
 
 class App extends Component {
   render() {
@@ -13,6 +14,7 @@ class App extends Component {
           <div className="uk-container uk-container-xsmall">
           <Switch>
             <Route exact path="/" component={Home} />
+            <Route exact path="/friends" component={Friends} />
             <Route exact path="/profile/:username" component={Profile} />
           </Switch>
           </div>

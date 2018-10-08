@@ -22,10 +22,10 @@ class Profile extends Component {
     render() {
         return (
             <div className="uk-flex uk-flex-column uk-flex-middle">
-                <img className="profileImageLg uk-margin-large-top" src={this.state.profileImage}></img>
+                <img className="profileImageLg uk-margin-large-top" alt="profile" src={this.state.profileImage}></img>
                 <p className="uk-margin-top uk-margin-small-bottom">{this.state.name}</p>
                 <ul className="uk-iconnav">
-                    <li><a href={this.state.githubURL} className="uk-link-reset" uk-icon="icon: github" uk-tooltip="Github Profile"></a></li>
+                    <li><a href={this.state.githubURL} className="uk-link-reset" uk-tooltip="Github Profile"><span uk-icon="icon: github"></span></a></li>
                 </ul>
                 <Stats actions="104" rank="4" globalRank="1286" />
             </div>
