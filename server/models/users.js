@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const User = sequelize.define('User', {
+    const Users = sequelize.define('Users', {
       username: {
           type: DataTypes.STRING,
           unique: true
@@ -10,15 +10,15 @@ module.exports = (sequelize, DataTypes) => {
         }
     });
   
-    User.associate = (models) => {
-        User.belongsToMany(models.User, {
-            as: 'friends',
-            through: 'friendship'
+    Users.associate = (models) => {
+        Users.belongsToMany(models.Users, {
+            as: 'Friends',
+            through: 'Friendships'
         }),
-        User.belongsToMany(models.Day, {
+        Users.belongsToMany(models.Days, {
             through: {model: models.UsersDays}
         })
     };
   
-    return User;
+    return Users;
   };
