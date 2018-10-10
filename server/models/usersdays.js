@@ -6,5 +6,10 @@ module.exports = function (sequelize, DataTypes){
         }
     });
 
+    UsersDays.associate = (models) => {
+        UsersDays.belongsTo(models.Days)
+        UsersDays.belongsTo(models.Users)
+    };
+
     return UsersDays;
 }
