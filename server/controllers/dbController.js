@@ -9,6 +9,13 @@ db.Users.create({
 }).then( user => console.log(user) )
 .catch( err => console.log(err))
 
+// Create User
+db.Users.create({
+    username: "azzihaq",
+    email: "azzihaq@gmail.com"
+}).then( user => console.log(user) )
+.catch( err => console.log(err))
+
 // Create Friendship
 
 db.Users.findOne({
@@ -24,8 +31,8 @@ db.Users.findOne({
         }
     })
     .then( secondUser =>{
-        firstUser.setFriends([secondUser])
         secondUser.setFriends([firstUser])
+        firstUser.setFriends([secondUser])
     })
 )
 
@@ -70,7 +77,7 @@ db.Friendships.findAll()
 // Create Day
 
 // Update Activity for day
-function updateActivity( userId, dayId, activity ) {
+function updateActivity( dayId, userId, activity ) {
 
     db.UsersDays.update({
         activity: activity
@@ -84,7 +91,7 @@ function updateActivity( userId, dayId, activity ) {
 }
 
 // create user day relationship
-function createUserDay( userId, dayId, activity ) {
+function createUserDay( dayId, userId, activity ) {
 
     db.Users.findOne({
         where: {
@@ -118,7 +125,26 @@ function createUserDay( userId, dayId, activity ) {
             // if not, 
                 //create relationship then insert activity
 
-
+function activityUpdate( date, userId, activity ){
+    // Check if Day exists
+    db.Days.findOne({
+        where: {
+            date: date
+        }
+    }).then( day => {
+        // if not
+        if ( !day ) {
+            db.Days.create({
+                date: date
+            }).then( () =>
+                // Rerun function
+                activityUpdate( date, userId, activity) 
+            )
+        } else {
+            // Check if UsersDays relationship exists
+        }
+    })
+}
 
 // module.exports = {
 //     getAll: function(req, res) {
@@ -129,6 +155,9 @@ function createUserDay( userId, dayId, activity ) {
 //     }
 // }
 
+// check if user id stored in session matches userid of profile page being visited
+// through findOne user
+
 
 // For Days:
 // Need to pull the maximum number of events that we can from the octokit api
@@ -137,4 +166,9 @@ function createUserDay( userId, dayId, activity ) {
         // if it does, increment activity count by one
         // once all have been looped through push (or update) the activity amount on that day to the UsersDays table
 
-module.exports = router;
+// module.exports = {
+//     // all functions go here
+
+// };
+
+module.exports = router

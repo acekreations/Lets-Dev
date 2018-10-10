@@ -1,6 +1,7 @@
 const router = require("express").Router();
-// const articleRoutes = require("./example");
+const dbController = require("../../controllers/dbController");
 
-// router.use("/example", articleRoutes);
+router.route("/")
+    .get(dbController.functionName);
 
 module.exports = router;
