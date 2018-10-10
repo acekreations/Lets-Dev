@@ -1,6 +1,12 @@
 const db = require("../models");
 var express = require("express")
 var router = express.Router();
+var moment = require('moment')
+
+function convertDate(dateString) {
+    result = moment(dateString).format('YYYY-MM-DD');
+    return result
+}
 
 // Create User
 db.Users.create({
@@ -74,10 +80,28 @@ db.Friendships.findAll()
 .then( result => console.log(result) )
 .catch( err => console.log(err) )
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Create Day
 
 // Update Activity for day
-function updateActivity( dayId, userId, activity ) {
+// called fifth
+function updateUserDay( dayId, userId, activity ) {
 
     db.UsersDays.update({
         activity: activity
@@ -91,6 +115,7 @@ function updateActivity( dayId, userId, activity ) {
 }
 
 // create user day relationship
+// called fourth
 function createUserDay( dayId, userId, activity ) {
 
     db.Users.findOne({
@@ -108,24 +133,13 @@ function createUserDay( dayId, userId, activity ) {
             user.setDays([day])
         )
         .then( () => 
-            updateActivity( userId, dayId, activity )
+            updateUserDay( dayId, userId, activity )
         )
     )
 }
 
-// Activity Tracking
-
-    // Check if Day exists,
-        // if not, create day
-
-        // then Check if UsersDays relationship exists
-            // if yes
-                //insert activity
-            
-            // if not, 
-                //create relationship then insert activity
-
-function activityUpdate( date, userId, activity ){
+// called third
+function dailyActivityUpdate( date, userId, activity ){
     // Check if Day exists
     db.Days.findOne({
         where: {
@@ -138,11 +152,95 @@ function activityUpdate( date, userId, activity ){
                 date: date
             }).then( () =>
                 // Rerun function
-                activityUpdate( date, userId, activity) 
+                dailyActivityUpdate( date, userId, activity) 
             )
         } else {
             // Check if UsersDays relationship exists
+            db.UsersDays.findOne({
+                where: {
+                    UserId: userId,
+                    DayId: day.id
+                }
+            }).then( userDay => {
+                //if not
+                if( !userDay ) {
+                    createUserDay( day.id, userId, activity )
+                } else {
+                    updateUserDay( day.id, userId, activity )
+                }
+            })
         }
+    })
+}
+
+// Called First
+function checkForUpdate( userId ) {
+    db.Users.findOne({
+        where: {
+            UserId: userId
+        }
+    }).then( user => {
+        // OctoKit call goes here
+        var today = convertDate(moment());
+        var lastUpdate = convertDate(user.updatedAt)
+        var dailyActivityCount = 0;
+        runUpdates( lastUpdate, today, dailyActivityCount, events, userId)
+    })
+}
+
+// Called Second
+function runUpdates( lastUpdate, checkedLast, dailyActivityCount, eventsArray, userId ) {
+    if ( lastUpdate < checkedLast ) {
+        let eventDay = convertDate(eventsArray[0].created_at)
+        if ( eventDay === checkedLast ) {
+            dailyActivityCount += 1;
+            eventsArray.shift();
+            runUpdates( lastUpdate, checkedLast, dailyActivityCount, eventsArray, userId )
+        } else if (eventDay < checkedLast) {
+            dailyActivityUpdate( eventDay, userId, dailyActivityCount )
+            dailyActivityCount = 1;
+            checkedLast = eventDay;
+            eventsArray.shift();
+            runUpdates( lastUpdate, checkedLast, dailyActivityCount, eventsArray, userId )
+        }
+    } else {
+        updateActivityScore( userId )
+    }
+}
+
+// Generate a user's activity score
+function updateActivityScore( userId ) {
+    db.UsersDays.findAll({
+        where: {
+            UserId: userId
+        },
+        include: [{
+            model: 'Days',
+            as: 'day'
+        }]
+    })
+    .then( result => {
+        console.log(result)
+        let activityScore = 0;
+        let earliestDay =  moment().subtract('days', 30);
+        result.forEach(element => {
+            let date = convertDate(element.day.date)
+            if (date > earliestDay ) {
+                activityScore += element.activity
+            } else if (date === earliestDay || result.indexOf(element) === result.length - 1) {
+                activityScore += element.activity
+                // update with final activity score
+                db.Users.update({
+                    activity: activityScore
+                } , {
+                    where: {
+                        UserId: userId
+                    }
+                }).then( finalResult =>
+                    res.json(finalResult)
+                )
+            }
+        })
     })
 }
 
@@ -157,14 +255,6 @@ function activityUpdate( date, userId, activity ){
 
 // check if user id stored in session matches userid of profile page being visited
 // through findOne user
-
-
-// For Days:
-// Need to pull the maximum number of events that we can from the octokit api
-// For each day, going back 30 days, 
-    // check to see if date of each event matches the date we are looking for
-        // if it does, increment activity count by one
-        // once all have been looped through push (or update) the activity amount on that day to the UsersDays table
 
 // module.exports = {
 //     // all functions go here
