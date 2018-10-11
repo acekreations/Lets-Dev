@@ -1,6 +1,6 @@
 const express = require("express");
-// const routes = require("./routes")
-const routes = require("./controllers/dbController")
+const routes = require("./routes")
+// const routes = require("./controllers/dbController")
 
 const db = require("./models");
 
@@ -25,4 +25,4 @@ app.use(express.json());
 
 app.use(express.static("../client/public"));
 
-app.use("/", routes)
+app.use(routes)

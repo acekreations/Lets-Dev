@@ -1,7 +1,7 @@
 const router = require("express").Router();
-const dbController = require("../../controllers/dbController");
+const dbController = require("../../controllers/updateController");
 
 router.route("/")
-    .get(dbController.functionName);
+    // .get(dbController.functionName);
 
 module.exports = router;

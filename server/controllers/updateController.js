@@ -97,42 +97,49 @@ function convertDate(dateString) {
 // .catch( err => console.log(err) )
 
 
-
-
-// Called First
-function initializeUpdate( userId ) {
-    console.log("::::::::::::::::::::::::::::::::::::CHECKPOINT 1.0::::::::::::::::::::::::::::::::::::")
+function checkForUpdate( userid ) {
+    console.log("::::::::::::::::::::::::::::::::::::CHECKPOINT 0.0::::::::::::::::::::::::::::::::::::")
     db.Users.findOne({
         where: {
             id: userId
         }
     }).then( user => {
-        
-        // OctoKit call for user's events
-        let username = user.username
-        let per_page = 100;
-        let page = 1;
-        
+
         var lastUpdate = convertDate(user.updatedAt)
-        var created = convertDate(user.createdAt)
-        // if (moment().subtract(1, 'days') < lastUpdate) {
 
-            octokit.activity.getEventsForUser({username, per_page, page})
-            .then(result => {
-                console.log("::::::::::::::::::::::::::::::::::::CHECKPOINT 1.1::::::::::::::::::::::::::::::::::::")
-                console.log(result.data[0])
-                const events = result.data
-                var today = convertDate(moment());
-                var dailyActivityCount = 0;
+        // If user has not been updated in the last day, run update
+        if (moment().subtract(1, 'days') < moment(lastUpdate)) {
+            initializeUpdate( user )
+        }
+    })
+}
 
-                if (moment().subtract(5, 'days') < moment(created)) {
-                    extendedRange = convertDate(moment().subtract(30, 'days'))
-                    runUpdates( extendedRange, today, dailyActivityCount, events, userId)
-                } else {
-                    runUpdates( lastUpdate, today, dailyActivityCount, events, userId)
-                }
-            })
-        // }
+
+// Called First
+function initializeUpdate( user ) {
+        
+    // OctoKit call for user's events
+    let username = user.username
+    let per_page = 100;
+    let page = 1;
+    
+    var created = convertDate(user.createdAt)
+    
+
+    octokit.activity.getEventsForUser({username, per_page, page})
+    .then(result => {
+        console.log("::::::::::::::::::::::::::::::::::::CHECKPOINT 1.0::::::::::::::::::::::::::::::::::::")
+        console.log(result.data[0])
+        const events = result.data
+        var today = convertDate(moment());
+        var dailyActivityCount = 0;
+
+        if (moment().subtract(1, 'days') < moment(created)) {
+            extendedRange = convertDate(moment().subtract(30, 'days'))
+            runUpdates( extendedRange, today, dailyActivityCount, events, userId)
+        } else {
+            runUpdates( lastUpdate, today, dailyActivityCount, events, userId)
+        }
     })
 }
 
@@ -256,13 +263,13 @@ function updateActivityScore( userId ) {
     })
     .then( result => {
         console.log("::::::::::::::::::::::::::::::::::::CHECKPOINT 6.1::::::::::::::::::::::::::::::::::::")
-        
-        let stopPoint =  moment().subtract(30, 'days');
+    
         const update = async () => {
-            console.log(result.length)
-            const activityScore = await compoundActivity(result, stopPoint)
-            console.log(`activityScore: ${activityScore}`)
 
+            // calculates activity score
+            const activityScore = await compoundActivity(result)
+
+            //
             db.Users.update({
                 activity: activityScore
             } , {
@@ -279,26 +286,24 @@ function updateActivityScore( userId ) {
     })
 }
 
-// BUG IS HERE, ACTIVITY SCORE IS ALWAYS RETURNING THE LAST ONE
-////////////////////////////////////
-function compoundActivity(array, stopPoint) {
+function compoundActivity(array) {
+    console.log("::::::::::::::::::::::::::::::::::::CHECKPOINT 6.1::::::::::::::::::::::::::::::::::::")
+
+    //Increment activity score for each entry for the last 30 days
+    let stopPoint =  moment().subtract(30, 'days');
     let activityScore = 0;
     array.forEach(element => {
-        console.log (element.dataValues.activity)
         let date = convertDate(element.Day.dataValues.date)
         console.log(date)
         if (moment(date) > moment(stopPoint) ) {
             activityScore += element.activity
         } else if (moment(date) === moment(stopPoint) || array.indexOf(element) === array.length - 1) {
             activityScore += element.activity
+            return activityScore
         }
     })
     // update with final activity score
-    return activityScore
 }
-
-updateActivityScore( 1 )
-// initializeUpdate( 1 )
 
 // module.exports = {
 //     getAll: function(req, res) {
