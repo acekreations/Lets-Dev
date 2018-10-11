@@ -5,7 +5,20 @@ import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import Friends from "./pages/Friends";
 
+
 class App extends Component {
+  state = {
+    userID: "",
+    accessToken: ""
+  };
+
+  handleAuth = event => {
+    event.preventDefault();
+    var queryURL = "https://github.com/login/oauth/authorize?client_id=e52b2491623d91b826f2&state=active";
+    Window.location=queryURL;
+  };
+  
+  
   render() {
     return (
       <Router>
@@ -20,6 +33,7 @@ class App extends Component {
           </div>
         </div>
       </Router>
+
     );
   }
 }
