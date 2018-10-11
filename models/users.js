@@ -1,8 +1,13 @@
 module.exports = (sequelize, DataTypes) => {
-    const Users = sequelize.define('Users', {
+    const Users = sequelize.define("Users", {
         username: {
             type: DataTypes.STRING,
-            unique: true
+            unique: true,
+            required: true
+        },
+        fullName: {
+            type: DataTypes.STRING,
+            unique: false
         },
         email: {
             type: DataTypes.STRING,
@@ -11,18 +16,21 @@ module.exports = (sequelize, DataTypes) => {
         activity: {
             type: DataTypes.INTEGER,
             default: 0
+        },
+        imageUrl: {
+            type: DataTypes.STRING
         }
     });
-  
-    Users.associate = (models) => {
+
+    Users.associate = models => {
         Users.belongsToMany(models.Users, {
-            as: 'Friends',
-            through: 'Friendships'
+            as: "Friends",
+            through: "Friendships"
         }),
-        Users.belongsToMany(models.Days, {
-            through: {model: models.UsersDays}
-        })
+            Users.belongsToMany(models.Days, {
+                through: { model: models.UsersDays }
+            });
     };
-  
+
     return Users;
-  };
+};
