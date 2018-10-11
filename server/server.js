@@ -7,6 +7,7 @@ const db = require("./models");
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+require("./routes/api/auth.js")(app);
 
 
 if (process.env.NODE_ENV === "production") {
