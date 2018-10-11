@@ -1,41 +1,30 @@
 import React, { Component } from "react";
-import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
-import NavBar from "./components/NavBar";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import Friends from "./pages/Friends";
-
+import Landing from "./pages/Landing";
 
 class App extends Component {
-  state = {
-    userID: "",
-    accessToken: ""
-  };
-
-  handleAuth = event => {
-    event.preventDefault();
-    var queryURL = "https://github.com/login/oauth/authorize?client_id=e52b2491623d91b826f2&state=active";
-    Window.location=queryURL;
-  };
-  
-  
-  render() {
-    return (
-      <Router>
-        <div>
-          <NavBar name="Craig Melville" username="acekreations" />
-          <div className="uk-container uk-container-xsmall">
-          <Switch>
-            <Route exact path="/" component={Home} />
-            <Route exact path="/friends" component={Friends} />
-            <Route exact path="/profile/:username" component={Profile} />
-          </Switch>
-          </div>
-        </div>
-      </Router>
-
-    );
-  }
+    render() {
+        return (
+            <Router>
+                <div>
+                    <Switch>
+                        <Route exact path="/" component={Landing} />
+                        <Route exact path="/home" component={Home} />
+                        <Route exact path="/friends" component={Friends} />
+                        <Route
+                            exact
+                            path="/profile/:username"
+                            component={Profile}
+                        />
+                        <Route component={Landing} />
+                    </Switch>
+                </div>
+            </Router>
+        );
+    }
 }
 
 export default App;
