@@ -1,0 +1,40 @@
+body {
+    background-color: #F5F5F5;
+    color: #000;
+    font-family: 'K2D', sans-serif;
+    font-weight: 500;
+    min-height: 100vh;
+    font-size: 1.2em;
+}
+
+a {
+    font-size: 1.1em !important;
+    font-family: 'K2D', sans-serif !important;
+    text-transform: none !important;
+    color: #000 !important;
+}
+
+a:hover {
+    text-decoration: underline !important;
+}
+
+h1, h2, h3, h4, h5, p, span, th, input {
+    color: #000 !important;
+    font-family: 'K2D', sans-serif;
+    font-weight: 500;
+    margin: 0px;
+}
+
+.profileImage {
+    max-width: none !important;
+    width: 50px !important;
+    height: 50px;
+    border-radius: 100px;
+}
+
+.profileImageLg {
+    max-width: none !important;
+    width: 150px !important;
+    height: 150px;
+    border-radius: 150px;
+}

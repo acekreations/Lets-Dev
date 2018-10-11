@@ -1,5 +1,9 @@
-import React, { Component } from 'react';
-import AuthButton from "./components/AuthButton";
+import React, { Component } from "react";
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
+import NavBar from "./components/NavBar";
+import Home from "./pages/Home";
+import Profile from "./pages/Profile";
+import Friends from "./pages/Friends";
 
 
 class App extends Component {
@@ -17,15 +21,19 @@ class App extends Component {
   
   render() {
     return (
-      <div>
-        <h1>Lets Dev</h1>
-        <AuthButton
-          onClick={this.handleAuth}
-          className="subbtn"
-        >
-          Login
-        </AuthButton>
-      </div>
+      <Router>
+        <div>
+          <NavBar name="Craig Melville" username="acekreations" />
+          <div className="uk-container uk-container-xsmall">
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route exact path="/friends" component={Friends} />
+            <Route exact path="/profile/:username" component={Profile} />
+          </Switch>
+          </div>
+        </div>
+      </Router>
+
     );
   }
 }
