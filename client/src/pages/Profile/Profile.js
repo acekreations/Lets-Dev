@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import Stats from "../../components/Stats";
 import NavBar from "../../components/NavBar";
+import API from "../../utils/API";
 
 class Profile extends Component {
     state = {
-        name: "Craig Melvillle",
-        username: "acekreations",
-        profileImage: "https://via.placeholder.com/350x350",
-        githubURL: "https://github.com/acekreations"
+        name: "",
+        username: "",
+        profileImage: "",
+        githubURL: ""
     };
 
     componentDidMount() {
@@ -15,15 +16,22 @@ class Profile extends Component {
     }
 
     loadProfile = () => {
-        console.log(this.props.match.params.username);
-
-        //API call => set state
+        const thisComp = this;
+        API.getUserProfile(this.props.match.params.username).then(res => {
+            console.log(res);
+            thisComp.setState({
+                username: res.username,
+                fullName: res.fullName,
+                imageUrl: res.imageUrl,
+                githubURL: "https://github.com/" + res.username
+            });
+        });
     };
 
     render() {
         return (
             <div>
-                <NavBar name="Craig Melville" username="acekreations" />
+                <NavBar />
                 <div className="uk-flex uk-flex-column uk-flex-middle">
                     <img
                         className="profileImageLg uk-margin-large-top"

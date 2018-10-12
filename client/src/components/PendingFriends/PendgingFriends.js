@@ -10,7 +10,7 @@ class PendingFriends extends Component {
                 </div>
                 <table className="uk-table uk-table-divider uk-table-middle uk-margin-top">
                     <tbody>
-                        {this.props.pendingFriends.map(friend => (
+                        {this.props.requests.map(friend => (
                             <tr>
                                 <td className="uk-text-left table-10">
                                     <img
