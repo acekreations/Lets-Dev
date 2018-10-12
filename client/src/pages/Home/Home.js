@@ -11,7 +11,7 @@ class Home extends Component {
     render() {
         return (
             <div>
-                <NavBar name="Craig Melville" username="acekreations" />
+                <NavBar />
                 <div className="uk-container uk-container-xsmall">
                     <Stats actions="104" rank="4" globalRank="1286" />
                     <div className="uk-section uk-section-default uk-margin-large-top uk-padding-remove">

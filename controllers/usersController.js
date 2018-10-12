@@ -5,7 +5,7 @@ module.exports = {
     getUser: function(req, res) {
         db.User.find({
             where: {
-                id: req.params.id
+                username: req.params.username
             }
         })
             .then(user => {

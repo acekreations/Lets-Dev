@@ -4,32 +4,34 @@ import SearchFriends from "../../components/SearchFriends";
 import PendingFriends from "../../components/PendingFriends";
 import API from "../../utils/API";
 import NavBar from "../../components/NavBar";
+import Cookie from "react-cookie";
 
 class Friends extends Component {
     state = {
         friends: [],
-        pendingFriends: []
+        requests: []
     };
 
     componentDidMount() {
         //loadFriends();
-        //loadPendingFriends();
+        //loadRequests();
     }
 
     loadFriends = () => {
         const thisComp = this;
-        API.getFriends().then(function(res) {
+        const userId = Cookie.get("userId");
+        API.getFriends(userId).then(function(res) {
             thisComp.setState({
                 friends: res.data
             });
         });
     };
 
-    loadPendingFriends = () => {
+    loadRequests = () => {
         const thisComp = this;
-        API.getPendingFriends().then(function(res) {
+        API.displayRequests().then(function(res) {
             thisComp.setState({
-                friends: res.data
+                requests: res.data
             });
         });
     };
@@ -37,12 +39,10 @@ class Friends extends Component {
     render() {
         return (
             <div>
-                <NavBar name="Craig Melville" username="acekreations" />
+                <NavBar />
                 <div className="uk-container uk-container-xsmall">
                     {this.state.pendingFriends.length > 0 && (
-                        <PendingFriends
-                            pendingFriends={this.state.pendingFriends}
-                        />
+                        <PendingFriends requests={this.state.requests} />
                     )}
                     <SearchPeople />
                     {this.state.friends.length > 0 && (

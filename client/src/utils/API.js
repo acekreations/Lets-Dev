@@ -1,8 +1,8 @@
 import axios from "axios";
 
 export default {
-    getUserProfile: function(id) {
-        return axios.get("/api/users/" + id);
+    getUserProfile: function(username) {
+        return axios.get("/api/users/" + username);
     },
     displayFriends: function(id) {
         return axios.get("/api/friends/" + id);
@@ -22,7 +22,7 @@ export default {
         return axios.get("/api/request/" + id);
     },
     login: function(username) {
-        return axios.get("/api/login" + username);
+        return axios.get("/api/login/" + username);
     },
     signUp: function() {
         return axios.post("/api/signup");

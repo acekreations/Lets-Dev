@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./Landing.css";
 import { Animated } from "react-animated-css";
+import API from "../../utils/API";
 
 class Landing extends Component {
     state = {
@@ -25,6 +26,18 @@ class Landing extends Component {
         }
     };
 
+    login = () => {
+        API.login().then(function() {
+            //do stuff
+        });
+    };
+
+    signup = () => {
+        API.signup.then(function() {
+            //do stuff
+        });
+    };
+
     render() {
         return (
             <div className="uk-container-expand landing-container-main">
@@ -36,7 +49,10 @@ class Landing extends Component {
                         >
                             Features
                         </a>
-                        <button className="uk-margin-top landingBtn">
+                        <button
+                            className="uk-margin-top landingBtn"
+                            onClick={this.login}
+                        >
                             Sign In
                         </button>
                     </div>
@@ -54,7 +70,10 @@ class Landing extends Component {
                         </div>
                         <div className="uk-flex uk-flex-middle uk-flex-right">
                             <Animated animationIn="flipInX">
-                                <button className="landingBtn">
+                                <button
+                                    className="landingBtn"
+                                    onClick={this.signup}
+                                >
                                     Sign Up With GitHub{" "}
                                     <span uk-icon="icon: github" />
                                 </button>

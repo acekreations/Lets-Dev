@@ -9,7 +9,7 @@ router.route("/login/:username").get(loginController.getUser);
 router.route("/signup").post(loginController.createUser);
 
 // Users Controller Routes
-router.route("/users/:id").get(usersController.getUser);
+router.route("/users/:username").get(usersController.getUser);
 router.route("/friends/:id").get(usersController.getFriends);
 
 // Update Controller Route
