@@ -6,10 +6,10 @@ module.exports = {
     // When you log in to the site, a call to this function will be made to get all of the users information.
     // When we return to the front end, we will save the user's information in the session/cookies.
     getUser: function(req, res) {
-        db.User
-        .find({
+        db.Users
+        .findOne({
             where: {
-                username: req.body.userName
+                username: req.params.username
             }
         })
         .then(user => {
@@ -20,10 +20,8 @@ module.exports = {
 
     // If the Get call fails to return a user, then a post call should be made to create the user with the 
     createUser: function(req, res) {
-        db.User
-        .create({
-            where: req.body
-        })
+        db.Users
+        .create(req.body)
         .then( user => {
             res.json(user)
         })

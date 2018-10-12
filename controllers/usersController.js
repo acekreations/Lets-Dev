@@ -3,9 +3,23 @@ const db = require("../models");
 module.exports = {
     // Get call for one user's profile page, using id in call paramater
     getUser: function(req, res) {
-        db.User.find({
+        db.Users.findOne({
             where: {
                 username: req.params.username
+            }
+        })
+            .then(user => {
+                res.json(user);
+            })
+            .catch(err => res.status(422).json(err));
+    },
+
+    findUsers: function(req, res) {
+        db.Users.findAll({
+            like: {
+                fullName: {
+                    $ilike: '%'+req.params.query+'%'
+                }
             }
         })
             .then(user => {

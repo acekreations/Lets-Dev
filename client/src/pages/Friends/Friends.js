@@ -4,7 +4,7 @@ import SearchFriends from "../../components/SearchFriends";
 import PendingFriends from "../../components/PendingFriends";
 import API from "../../utils/API";
 import NavBar from "../../components/NavBar";
-import Cookie from "react-cookie";
+// import Cookie from "react-cookie";
 
 class Friends extends Component {
     state = {
@@ -19,7 +19,8 @@ class Friends extends Component {
 
     loadFriends = () => {
         const thisComp = this;
-        const userId = Cookie.get("userId");
+        // const userId = Cookie.get("userId");
+        const userId = 1;
         API.getFriends(userId).then(function(res) {
             thisComp.setState({
                 friends: res.data
@@ -41,7 +42,7 @@ class Friends extends Component {
             <div>
                 <NavBar />
                 <div className="uk-container uk-container-xsmall">
-                    {this.state.pendingFriends.length > 0 && (
+                    {this.state.requests.length > 0 && (
                         <PendingFriends requests={this.state.requests} />
                     )}
                     <SearchPeople />

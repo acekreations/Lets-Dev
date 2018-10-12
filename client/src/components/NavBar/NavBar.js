@@ -16,7 +16,8 @@ class NavBar extends Component {
 
     loadProfile = () => {
         const thisComp = this;
-        API.getUserProfile(this.props.match.params.username).then(res => {
+        // API.getUserProfile(this.props.match.params.username).then(res => {
+        API.getUserProfile("aehaq").then(res => {
             console.log(res);
             thisComp.setState({
                 username: res.username,

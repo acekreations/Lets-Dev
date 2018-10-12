@@ -40,13 +40,13 @@ function checkForUpdate(userId) {
 
         // If user has not been updated in the last day, run update
         if (moment().subtract(1, "days") < moment(lastUpdate)) {
-            initializeUpdate(user);
+            initializeUpdate(user, userId);
         }
     });
 }
 
 // Called First
-function initializeUpdate(user) {
+function initializeUpdate(user, userId) {
     // OctoKit call for user's events
     let username = user.username;
     let per_page = 100;
@@ -238,9 +238,6 @@ function updateActivityScore(userId) {
             UserId: userId
         }
     }).then(result => {
-        console.log(
-            "::::::::::::::::::::::::::::::::::::CHECKPOINT 6.1::::::::::::::::::::::::::::::::::::"
-        );
 
         const update = async () => {
             // calculates activity score
@@ -284,8 +281,8 @@ function compoundActivity(array) {
             array.indexOf(element) === array.length - 1
         ) {
             activityScore += element.activity;
-            return activityScore;
         }
     });
+    return activityScore;
     // update with final activity score
 }
