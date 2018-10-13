@@ -13,20 +13,20 @@
     },
     "devDependencies": {
         "concurrently": "^3.5.0",
-        "nodemon": "^1.11.0"
+        "nodemon": "^1.18.4"
     },
     "license": "",
     "dependencies": {
+        "@octokit/rest": "^15.13.1",
         "body-parser": "^1.18.3",
         "express": "^4.16.3",
+        "mysql2": "^1.6.1",
         "path": "^0.12.7",
+        "pg": "^7.5.0",
+        "pg-hstore": "^2.3.2",
         "react-cookie": "^3.0.4",
         "request": "^2.88.0",
         "require": "^2.4.20",
-        "@octokit/rest": "^15.13.1",
-        "mysql2": "^1.6.1",
-        "pg": "^7.5.0",
-        "pg-hstore": "^2.3.2",
         "sequelize": "^4.39.0"
     }
 }

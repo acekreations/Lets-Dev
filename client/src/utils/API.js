@@ -8,15 +8,15 @@ export default {
         return axios.get("/api/friends/" + id);
     },
     updateActivity: function(id) {
-        return axios.get("/api/update/" + id);
+        return axios.post("/api/update/" + id);
     },
-    createRequest: function() {
+    createRequest: function(req) {
         //post obj to req.body. user id friend id
-        return axios.post("/api/request");
+        return axios.post("/api/request", req);
     },
-    acceptRequest: function() {
+    acceptRequest: function(req) {
         //post obj to req.body. user id friend id
-        return axios.put("/api/request");
+        return axios.put("/api/request", req);
     },
     displayRequests: function(id) {
         return axios.get("/api/request/" + id);
@@ -24,7 +24,10 @@ export default {
     login: function(username) {
         return axios.get("/api/login/" + username);
     },
-    signUp: function() {
-        return axios.post("/api/signup");
+    signUp: function(req) {
+        return axios.post("/api/signup", req);
+    },
+    search: function(query) {
+        return axios.get("api/search/" + query);
     }
 };

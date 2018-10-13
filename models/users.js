@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         activity: {
             type: DataTypes.INTEGER,
-            default: 0
+            defaultValue: 0
         },
         imageUrl: {
             type: DataTypes.STRING

@@ -11,6 +11,7 @@ router.route("/signup").post(loginController.createUser);
 // Users Controller Routes
 router.route("/users/:username").get(usersController.getUser);
 router.route("/friends/:id").get(usersController.getFriends);
+router.route("/search/:query").get(usersController.findUsers);
 
 // Update Controller Route
 router.route("/update/:id").post(updateController.update);

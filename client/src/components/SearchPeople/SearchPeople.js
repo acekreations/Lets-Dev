@@ -1,16 +1,27 @@
 import React, { Component } from "react";
 import SearchPeopleResults from "../SearchPeopleResults";
 import "./SearchPeople.css";
+import API from "../../utils/API";
 
 class SearchPeople extends Component {
     state = {
-        searchInput: ""
+        searchInput: "",
+        results: [],
+        friends: this.props.friends
     };
 
     inputChange = event => {
-        const { name, value } = event.target;
+        const thisComp = this;
+        const { value } = event.target;
         this.setState({
-            [name]: value
+            searchInput: value
+        });
+        API.search(this.state.searchInput).then(function(res) {
+            console.log("***search response: ", res.data);
+            const newResult = res.data.filter(result => thisComp.state.friends.indexOf(result) === -1);
+            thisComp.setState({
+                results: newResult
+            });
         });
     };
 
@@ -36,14 +47,7 @@ class SearchPeople extends Component {
                     <div className="uk-text-center uk-flex uk-flex-around uk-flex-middle">
                         <table className="uk-table uk-table-divider uk-table-middle uk-margin-top">
                             <tbody>
-                                <SearchPeopleResults
-                                    name="Craig Melville"
-                                    profileImage="https://via.placeholder.com/64x64"
-                                />
-                                <SearchPeopleResults
-                                    name="Craig Melville"
-                                    profileImage="https://via.placeholder.com/64x64"
-                                />
+                                {this.state.results.map(result => <SearchPeopleResults key={result.id} fullName={result.fullName} imageUrl={result.imageUrl} username={result.username}/>)}
                             </tbody>
                         </table>
                     </div>

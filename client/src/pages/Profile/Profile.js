@@ -5,25 +5,22 @@ import API from "../../utils/API";
 
 class Profile extends Component {
     state = {
-        name: "",
-        username: "",
-        profileImage: "",
-        githubURL: ""
+        user: {},
+        profileOwner: {}
     };
 
     componentDidMount() {
+        // grab userinfo from cookie to store as user
         this.loadProfile();
     }
 
     loadProfile = () => {
+        console.log("loading profile")
         const thisComp = this;
         API.getUserProfile(this.props.match.params.username).then(res => {
             console.log(res);
             thisComp.setState({
-                username: res.username,
-                fullName: res.fullName,
-                imageUrl: res.imageUrl,
-                githubURL: "https://github.com/" + res.username
+                profileOwner: res.data
             });
         });
     };
@@ -31,20 +28,24 @@ class Profile extends Component {
     render() {
         return (
             <div>
-                <NavBar />
+                <NavBar 
+                    fullName={this.state.user.fullName} 
+                    username={this.state.user.username} 
+                    profileImage={this.state.user.imageUrl}
+                />
                 <div className="uk-flex uk-flex-column uk-flex-middle">
                     <img
                         className="profileImageLg uk-margin-large-top"
                         alt="profile"
-                        src={this.state.profileImage}
+                        src={this.state.profileOwner.imageUrl}
                     />
                     <p className="uk-margin-top uk-margin-small-bottom">
-                        {this.state.name}
+                        {this.state.profileOwner.fullName}
                     </p>
                     <ul className="uk-iconnav">
                         <li>
                             <a
-                                href={this.state.githubURL}
+                                href={"https://github.com/" + this.state.profileOwner.username}
                                 className="uk-link-reset"
                                 uk-tooltip="Github Profile"
                             >
@@ -52,7 +53,7 @@ class Profile extends Component {
                             </a>
                         </li>
                     </ul>
-                    <Stats actions="104" rank="4" globalRank="1286" />
+                    <Stats actions={this.state.profileOwner.activity} rank="4" globalRank="1286" />
                 </div>
             </div>
         );

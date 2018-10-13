@@ -32,8 +32,8 @@ class Landing extends Component {
         });
     };
 
-    signup = () => {
-        API.signup.then(function() {
+    signup = (userData) => {
+        API.signup.then(function(userData) {
             //do stuff
         });
     };

@@ -48,21 +48,24 @@ class SearchFriends extends Component {
                     id="friendTable"
                 >
                     <tbody>
-                        <tr>
-                            <td className="uk-text-left table-10">
-                                <img
-                                    className="profileImage"
-                                    alt="profile"
-                                    src="https://via.placeholder.com/64x64"
-                                />
-                            </td>
-                            <td className="uk-text-left table-80">
-                                <Link to={"/"} className="uk-link-reset">
-                                    Craig Melville
-                                </Link>
-                            </td>
-                        </tr>
-                        <tr>
+                        {this.props.friends.map(friend => (
+                            <tr>
+                                <td className="uk-text-left table-10">
+                                    <img
+                                        className="profileImage"
+                                        alt="profile"
+                                        src={friend.imgUrl}
+                                    />
+                                </td>
+                                <td className="uk-text-left table-80">
+                                    <Link to={"/profile/" + friend.username} className="uk-link-reset">
+                                        {friend.fullName}
+                                    </Link>
+                                </td>
+                            </tr>
+                        ))}
+
+                        {/* <tr>
                             <td className="uk-text-left table-10">
                                 <img
                                     className="profileImage"
@@ -75,7 +78,7 @@ class SearchFriends extends Component {
                                     John Smith
                                 </Link>
                             </td>
-                        </tr>
+                        </tr> */}
                     </tbody>
                 </table>
             </div>
