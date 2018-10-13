@@ -8,29 +8,32 @@ const cookies = new Cookies();
 
 module.exports = function(app) {
 
+    //callback route for Github returning data
     app.get("/github/callback/", function(req, res) {
+        const cookies = new Cookies(req, res);
+        //grab session code that Github returns in params 
         var session_code = req.query.code;
-        console.log(session_code);
-        res.sendFile(path.join(__dirname, "../public/index.html"));
-
+        console.log("code="+ session_code);
+        
+        //POST request with session code 
         request({
             url:"https://github.com/login/oauth/access_token",
             method:"POST",
             json:true,
-            body:{code: session_code,client_id:"e52b2491623d91b826f2",client_secret:"704548b912277672139d79560c6ef28017a6b3df",accept:"json"}
+            body:{code: session_code,client_id:"3c9aad92df4d73f9b61b",client_secret:"92dca1ca6a97221dbeb187ac063a58b20d5cf967",accept:"json"}
         },
+
+        // receive access token from Github response
             function (error, response, body) {
                 console.log(response.body);
                 if (!error&&response.statusCode ==200) {
-                    console.log(response);
+                    console.log("POST success!!!");
                     console.log("access token="+response.body.access_token);
-                    cookies.set("access token", response.body.access_token, { path: '/' }); 
-
-                    var access_token=cookies.get("access token");
-                    console.log(access_token);
+                    var access_token = response.body.access_token;
             
+                // GET request using access token to get user profile data
                     request({
-                        url:"https://api.github.com/user?access_token="+access_token,
+                        url:"https://api.github.com/user?access_token="+response.body.access_token,
                         method:"GET",
                         json:true,
                         headers: {
@@ -39,22 +42,19 @@ module.exports = function(app) {
                     },
             
                         function(error, response, body) {
-                            console.log(response.body)
-                            cookies.set("login", response.body.login, { path: '/'});
-                            cookies.set("email", response.body.email, { path: '/'});
-                            console.log(cookies.get("login"));
-                            console.log(cookies.get("email"));
-            
-                        }
-            
-                    );
+                            console.log(response.body);
+                            var login = response.body.login;
+                            var name = response.body.name;
+                            var email = response.body.email;
+                            var avatar_url= response.body.avatar_url;  
 
-                    
+                            // redirect back to home page and pass data in params in url
+                            res.redirect("/?access_token="+access_token+"&login="+login+"&name="+name+"&email="+email+"&avatar_url="+avatar_url);
+                                        
+                        }
+                    );                    
                 }
             }
-
         );
     });
-
-
 }

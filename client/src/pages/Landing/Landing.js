@@ -1,15 +1,20 @@
 import React, { Component } from "react";
 import "./Landing.css";
 import { Animated } from "react-animated-css";
-import API from "../../utils/API";
+import { Cookies } from "react-cookie";
+import { queryString} from "query-string";
+
+const cookies = new Cookies();
 
 class Landing extends Component {
     state = {
-        j: 0
+        j: 0,
+        isAuthenticated: false
     };
 
     componentDidMount() {
         this.typeTagLine();
+        this.handleAuth();
     }
 
     typeTagLine = () => {
@@ -24,6 +29,41 @@ class Landing extends Component {
             });
             setTimeout(this.typeTagLine, speed);
         }
+    };
+
+    //Grab data from url params that returns from auth flow and set cookies
+    handleAuth = () => {
+        console.log(this.props);
+        const search = this.props.location.search;
+        const params = new URLSearchParams(search);
+        var access_token = params.get("access_token");
+        var login = params.get("login");
+        var name = params.get("name");
+        var email = params.get("email");
+        var avatar_url = params.get("avatar_url");
+        
+        cookies.set("access_token", access_token, { path: '/'});
+        cookies.set("login", login, { path: '/'});
+        cookies.set("name", name, { path: '/'});
+        cookies.set("email", email, { path: '/'});
+        cookies.set("avatar_url", avatar_url, { path: '/'});
+       
+      // set state to authenticated if user access_token is stored  
+      if (access_token) {
+          this.setState({
+              isAuthenticated: true
+          });
+      }
+      else {
+        this.setState({
+            isAuthenticated: false
+        });
+      }
+    
+    };
+
+    handleLogout = () => {
+        
     };
 
     login = () => {
@@ -49,12 +89,14 @@ class Landing extends Component {
                         >
                             Features
                         </a>
-                        <button
-                            className="uk-margin-top landingBtn"
-                            onClick={this.login}
-                        >
-                            Sign In
+                         {this.state.isAuthenticated
+                        ?<button className="uk-margin-top landingBtn" onClick={this.handleLogout}>
+                        Log Out
                         </button>
+                        :<a className="uk-margin-top landingBtn" href="https://github.com/login/oauth/authorize?client_id=3c9aad92df4d73f9b61b">
+                        Sign In
+                        </a>
+                        }
                     </div>
                     <div
                         id="callToAction"
