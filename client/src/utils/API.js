@@ -28,6 +28,6 @@ export default {
         return axios.post("/api/signup", req);
     },
     search: function(query) {
-        return axios.get("api/search/" + query);
+        return axios.get("api/users/search/" + query);
     }
 };
