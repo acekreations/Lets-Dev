@@ -16,7 +16,7 @@ class PendingFriends extends Component {
                                     <img
                                         className="profileImage"
                                         alt="profile"
-                                        src={friend.profileImage}
+                                        src={friend.imgUrl}
                                     />
                                 </td>
                                 <td className="uk-text-left table-80">
@@ -24,7 +24,7 @@ class PendingFriends extends Component {
                                         to={friend.username}
                                         className="uk-link-reset"
                                     >
-                                        {friend.name}
+                                        {friend.fullName}
                                     </Link>
                                 </td>
                                 <td className="uk-text-center table-10">

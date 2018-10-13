@@ -13,15 +13,15 @@ class Friends extends Component {
     };
 
     componentDidMount() {
-        //loadFriends();
-        //loadRequests();
+        this.loadFriends();
+        this.loadRequests();
     }
 
     loadFriends = () => {
         const thisComp = this;
         // const userId = Cookie.get("userId");
         const userId = 1;
-        API.getFriends(userId).then(function(res) {
+        API.displayFriends(userId).then(function(res) {
             thisComp.setState({
                 friends: res.data
             });
@@ -30,7 +30,8 @@ class Friends extends Component {
 
     loadRequests = () => {
         const thisComp = this;
-        API.displayRequests().then(function(res) {
+        const userId = 1;
+        API.displayRequests(userId).then(function(res) {
             thisComp.setState({
                 requests: res.data
             });
@@ -45,7 +46,9 @@ class Friends extends Component {
                     {this.state.requests.length > 0 && (
                         <PendingFriends requests={this.state.requests} />
                     )}
-                    <SearchPeople />
+
+                    <SearchPeople friends={this.state.friends} />
+
                     {this.state.friends.length > 0 && (
                         <SearchFriends friends={this.state.friends} />
                     )}

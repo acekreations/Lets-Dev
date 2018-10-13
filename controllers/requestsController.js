@@ -3,41 +3,17 @@ const db = require("../models");
 module.exports = {
     // Get call for one user's profile page, using id in call paramater
     createRequest: function(req, res) {
-        db.Users.findOne({
-            where: {
-                id: req.params.userId
-            }
-        }).then(requester =>
-            db.Users.findOne({
-                where: {
-                    id: req.params.friendId
-                }
-            }).then(newFriend => {
-                // Create friendship
-                requester.setFriends([newFriend]).then(result => {
-                    // add requester field to friendship
-                    db.Friendships.update({
-                        request_from: requester.username,
-                        where: {
-                            UserId: requester.id,
-                            FriendId: newFriend.id
-                        }
-                    }).then(result => {
-                        // Create friendship (reversed)
-                        newFriend.setFriends([requester]).then(result => {
-                            // add requester field to friendship
-                            db.Friendships.update({
-                                request_from: requester.username,
-                                where: {
-                                    UserId: newFriend.id,
-                                    FriendId: requester.id
-                                }
-                            }).then(result => res.json(result));
-                        });
-                    });
-                });
-            })
-        );
+        db.Friendships.create({
+            UserId:req.body.userId,
+            FriendId: req.body.friendId,
+            request_from: req.body.userId
+        }).then( result => {
+            db.Friendships.create({
+                UserId:req.body.friendId,
+                FriendId: req.body.userId,
+                request_from: req.body.userId
+            }).then( result => res.json(result))
+        })
     },
 
     // If the Get call fails to return a user, then a post call should be made to create the user with the
@@ -60,6 +36,8 @@ module.exports = {
     },
 
     getAll: function(req, res) {
+        console.log("request being made")
+        console.log("attempting to fetch user with friends")
         db.Users.findOne({
             where: {
                 id: req.params.id
@@ -72,24 +50,37 @@ module.exports = {
             ]
         })
             .then(user => {
-                let friends = user.Friends[0];
+                // console.log("user found:")
+                // console.log(user)
+                let friends = user.Friends;
+                // console.log("Friends")
+                // console.log(friends)
                 var friendsArray = [];
                 friends.forEach(friend => {
+                    console.log("request accepted (get requests)")
+                    console.log(friend.Friendships.accepted)
                     if (
-                        !friend.Friendship.accepted &&
-                        friend.Friendship.request_from != user.username
+                        !friend.Friendships.accepted &&
+                        friend.Friendships.request_from != req.params.id
                     ) {
+                        console.log("conditionals met")
+                        console.log("still working")
                         let friendObject = {
                             username: friend.username,
                             fullName: friend.full_name,
                             imgUrl: frined.image,
                             activity: friend.activity,
                             id: friend.id
-                        };
+                        }
+                        console.log("still working 2")
                         friendsArray.push(friendObject);
                     }
-                });
-                res.json(friendsArray);
+                    console.log(friendsArray)
+                })
+                .then( () => {
+                    console.log(friendsArray);
+                    res.json(friendsArray);
+                })
             })
             .catch(err => res.status(422).json(err));
     }

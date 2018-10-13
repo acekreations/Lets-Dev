@@ -62,7 +62,11 @@ class Home extends Component {
     render() {
         return (
             <div>
-                <NavBar />
+                <NavBar 
+                    fullName={this.state.user.fullName} 
+                    username={this.state.user.username} 
+                    profileImage={this.state.user.imageUrl}
+                />
                 <div className="uk-container uk-container-xsmall">
                     <Stats actions={this.state.user.activity} rank="4" globalRank="1286" />
                     <div className="uk-section uk-section-default uk-margin-large-top uk-padding-remove">

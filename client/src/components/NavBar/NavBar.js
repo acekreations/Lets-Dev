@@ -1,31 +1,8 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import "./NavBar.css";
-import API from "../../utils/API";
 
 class NavBar extends Component {
-    state = {
-        name: "",
-        username: "",
-        profileImage: ""
-    };
-
-    componentDidMount() {
-        this.loadProfile();
-    }
-
-    loadProfile = () => {
-        const thisComp = this;
-        // API.getUserProfile(this.props.match.params.username).then(res => {
-        API.getUserProfile("aehaq").then(res => {
-            console.log(res);
-            thisComp.setState({
-                username: res.username,
-                fullName: res.fullName,
-                imageUrl: res.imageUrl
-            });
-        });
-    };
 
     render() {
         return (
@@ -61,16 +38,16 @@ class NavBar extends Component {
                     <ul className="uk-navbar-nav uk-flex-middle">
                         <li>
                             <Link
-                                to={"/profile/" + this.state.username}
+                                to={"/profile/" + this.props.username}
                                 className="uk-link-reset"
                             >
-                                {this.state.fullName}
+                                {this.props.fullName}
                             </Link>
                         </li>
                         <li>
                             <img
                                 className="profile-image"
-                                src={this.state.profileImage}
+                                src={this.props.profileImage}
                                 alt="profile"
                             />
                         </li>

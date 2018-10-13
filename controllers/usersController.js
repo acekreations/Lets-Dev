@@ -22,10 +22,10 @@ module.exports = {
                 }
             }
         })
-            .then(user => {
-                res.json(user);
-            })
-            .catch(err => res.status(422).json(err));
+        .then(user => {
+            res.json(user);
+        })
+        .catch(err => res.status(422).json(err));
     },
 
     // If the Get call fails to return a user, then a post call should be made to create the user with the
@@ -41,11 +41,13 @@ module.exports = {
                 }
             ]
         })
-            .then(result => {
-                let friends = result.Friends[0];
+            .then(user => {
+                let friends = user.Friends;
                 var friendsArray = [];
                 friends.forEach(friend => {
-                    if (friend.Friendship.accepted) {
+                    console.log("request accepted (get friends)")
+                    console.log(friend.Friendships.accepted)
+                    if (friend.Friendships.accepted) {
                         let friendObject = {
                             userName: friend.username,
                             fullName: friend.fullname,
@@ -55,8 +57,11 @@ module.exports = {
                         };
                         friendsArray.push(friendObject);
                     }
-                });
-                res.json(friendsArray);
+                })
+                .then( () => {
+                    console.log(friendsArray);
+                    res.json(friendsArray);
+                })
             })
             .catch(err => res.status(422).json(err));
     }

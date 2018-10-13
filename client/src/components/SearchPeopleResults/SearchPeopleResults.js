@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import "./SearchPeopleResults.css";
 
 class SearchPeopleResults extends Component {
+
     render() {
         return (
             <tr>
@@ -10,12 +11,12 @@ class SearchPeopleResults extends Component {
                     <img
                         className="profileImage"
                         alt="profile"
-                        src={this.props.profileImage}
+                        src={this.props.imageUrl}
                     />
                 </td>
                 <td className="uk-text-left table-80">
-                    <Link to={"/"} className="uk-link-reset">
-                        {this.props.name}
+                    <Link to={"/profile/" + this.props.username} className="uk-link-reset">
+                        {this.props.fullName}
                     </Link>
                 </td>
                 <td className="uk-text-center table-10">
