@@ -64,23 +64,19 @@ module.exports = {
                         friend.Friendships.request_from != req.params.id
                     ) {
                         console.log("conditionals met")
-                        console.log("still working")
                         let friendObject = {
                             username: friend.username,
                             fullName: friend.full_name,
-                            imgUrl: frined.image,
+                            imgUrl: friend.image,
                             activity: friend.activity,
                             id: friend.id
                         }
-                        console.log("still working 2")
                         friendsArray.push(friendObject);
                     }
                     console.log(friendsArray)
                 })
-                .then( () => {
-                    console.log(friendsArray);
-                    res.json(friendsArray);
-                })
+                console.log(friendsArray);
+                res.json(friendsArray);
             })
             .catch(err => res.status(422).json(err));
     }

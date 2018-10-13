@@ -21,21 +21,56 @@ class Friends extends Component {
         const thisComp = this;
         // const userId = Cookie.get("userId");
         const userId = 1;
-        API.displayFriends(userId).then(function(res) {
-            thisComp.setState({
-                friends: res.data
-            });
+        API.displayFriends(userId).then(function(friends) {
+            console.log(friends)
+            // let friendsArray = [];
+            // friends.forEach(friend => {
+            //     if (friend.Friendships.accepted) {
+            //         let friendObject = {
+            //             userName: friend.username,
+            //             fullName: friend.fullname,
+            //             imgUrl: friend.imageUrl,
+            //             activity: friend.activity,
+            //             id: friend.id
+            //         };
+            //         friendsArray.push(friendObject)
+            //     }
+            // }).then( () =>
+            //     thisComp.setState({
+            //         friends: friendsArray
+            //     })
+            // )
         });
     };
 
     loadRequests = () => {
         const thisComp = this;
         const userId = 1;
+        // API.displayFriends(userId).then(function(res) {
+        //     let requestsArray = [];
+        //     friends.forEach(friend => {
+        //         if (friend.Friendships.accepted) {
+        //             let friendObject = {
+        //                 userName: friend.username,
+        //                 fullName: friend.fullname,
+        //                 imgUrl: friend.imageUrl,
+        //                 activity: friend.activity,
+        //                 id: friend.id
+        //             };
+        //             requestsArray.push(friendObject)
+        //         }
+        //     }).then( () =>
+        //         thisComp.setState({
+        //             requests: requestsArray
+        //         })
+        //     )
+        // });
         API.displayRequests(userId).then(function(res) {
+            console.log(res)
             thisComp.setState({
-                requests: res.data
-            });
-        });
+                requests: res
+            })
+        })
     };
 
     render() {
