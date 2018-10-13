@@ -62,9 +62,22 @@ class Landing extends Component {
     
     };
 
+
     handleLogout = () => {
-        
+        cookies.remove("access_token", { path: '/'});
+        cookies.remove("login", { path: '/'});
+        cookies.remove("name", { path: '/'});
+        cookies.remove("email", { path: '/'});
+        cookies.remove("avatar_url", { path: '/'});
+        this.setState({
+            isAuthenticated: false
+        });
+        this.props.history.replace("/");
+
     };
+
+
+
 
     login = () => {
         API.login().then(function() {
