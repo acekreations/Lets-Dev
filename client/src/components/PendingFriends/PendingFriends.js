@@ -1,7 +1,22 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import API from "../../utils/API";
 
 class PendingFriends extends Component {
+
+    acceptRequest = (arg) => {
+        // grab from cookie
+        const userId = 1;
+        const friendId = arg;
+        console.log(arg)
+        const data = {
+            userId: userId,
+            friendId: friendId
+        }
+        console.log(data)
+        API.acceptRequest(data).then(function(result) {})
+    }
+
     render() {
         return (
             <div className="uk-section uk-section-default uk-width-expand uk-margin-large-top uk-padding-small">
@@ -28,7 +43,7 @@ class PendingFriends extends Component {
                                     </Link>
                                 </td>
                                 <td className="uk-text-center table-10">
-                                    <span uk-icon="icon: check" />
+                                    <div onClick={ () => this.acceptRequest(friend.id)}><span uk-icon="icon: check" /></div>
                                 </td>
                             </tr>
                         ))}

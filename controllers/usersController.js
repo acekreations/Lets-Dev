@@ -19,12 +19,9 @@ module.exports = {
         console.log(req.params);
         db.Users.findAll({
             where: {
-                fullName: req.params.query,
-                $or: [{
-                    fullName: {
-                        $ilike: "%" + req.params.query + "%"
-                    }
-                }]
+                fullName: {
+                    $ilike: "%" + req.params.query + "%"
+                }
             }
         })
             .then(user => {

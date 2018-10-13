@@ -5,37 +5,31 @@ import API from "../../utils/API";
 
 class SearchPeople extends Component {
     state = {
-        searchInput: "test",
-        results: []
-        // friends: this.props.friends
+        searchInput: "",
+        results: [],
+        friends: this.props.friends
     };
 
     handleInputChange = event => {
-        console.log("input Change ran");
-        console.log(event.target);
-        // const thisComp = this;
         const value = event.target.value;
         this.setState({
             searchInput: value
         });
-        console.log(value);
+        console.log(this.state.searchInput.length);
         this.searchPeople();
     };
 
     searchPeople = () => {
-        console.log("hello")
-        console.log(this.state.searchInput)
+        const thisComp = this;
+        this.setState({ results: []})
         API.search(this.state.searchInput).then(function (res) {
-            console.log("***search response: ", res.data);
-            const newResult = res.data.filter(result => thisComp.state.friends.indexOf(result) === -1);
-            thisComp.setState({
-                results: newResult
-            });
+            if (thisComp.state.searchInput.length > 1) {
+                const newResult = res.data.filter(result => thisComp.state.friends.indexOf(result) === -1);
+                thisComp.setState({
+                    results: newResult
+                });
+            }
         });
-    }
-
-    logStuff = () => {
-        console.log("logging stuff");
     }
 
     render() {
@@ -52,7 +46,7 @@ class SearchPeople extends Component {
                             value={this.state.searchInput}
                             name="searchInput"
                             className="uk-input"
-                            onchange={this.logStuff} 
+                            onChange={this.handleInputChange} 
                             type="search"
                             placeholder="Search..."
                         />
