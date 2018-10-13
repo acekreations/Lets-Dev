@@ -23,7 +23,6 @@ class Friends extends Component {
         // const userId = Cookie.get("userId");
         const userId = 1;
         API.displayFriends(userId).then(function(friends) {
-            console.log(friends.data)
             thisComp.setState({
                 friends: friends.data
             })

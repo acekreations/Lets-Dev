@@ -15,17 +15,19 @@ module.exports = {
     },
 
     findUsers: function(req, res) {
+        console.log("searching users")
+        console.log(req.params);
         db.Users.findAll({
-            like: {
+            where: {
                 fullName: {
-                    $ilike: '%'+req.params.query+'%'
+                    $ilike: "%" + req.params.query + "%"
                 }
             }
         })
-        .then(user => {
-            res.json(user);
-        })
-        .catch(err => res.status(422).json(err));
+            .then(user => {
+                res.json(user);
+            })
+            .catch(err => res.status(422).json(err));
     },
 
     // returns a user's friends where friendship has been accepted

@@ -18,18 +18,22 @@ module.exports = {
 
     // If the Get call fails to return a user, then a post call should be made to create the user with the
     acceptRequest: function(req, res) {
+        console.log(req.body)
         db.Friendships.update({
-            accepted: true,
+            accepted: true}
+            , {
             where: {
-                UserId: req.params.userId,
-                FriendId: req.params.friendId
+                UserId: req.body.userId,
+                FriendId: req.body.friendId
             }
         }).then(firstResult => {
+            console.log("first complete")
             db.Friendships.update({
-                accepted: true,
+                accepted: true}
+                , {
                 where: {
-                    UserId: req.params.userId,
-                    FriendId: req.params.friendId
+                    UserId: req.body.friendId,
+                    FriendId: req.body.userId
                 }
             }).then(result => res.json(result));
         });

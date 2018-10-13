@@ -10,20 +10,27 @@ class SearchPeople extends Component {
         friends: this.props.friends
     };
 
-    inputChange = event => {
-        const thisComp = this;
-        const { value } = event.target;
+    handleInputChange = event => {
+        const value = event.target.value;
         this.setState({
             searchInput: value
         });
-        API.search(this.state.searchInput).then(function(res) {
-            console.log("***search response: ", res.data);
-            const newResult = res.data.filter(result => thisComp.state.friends.indexOf(result) === -1);
-            thisComp.setState({
-                results: newResult
-            });
-        });
+        console.log(this.state.searchInput.length);
+        this.searchPeople();
     };
+
+    searchPeople = () => {
+        const thisComp = this;
+        this.setState({ results: []})
+        API.search(this.state.searchInput).then(function (res) {
+            if (thisComp.state.searchInput.length > 1) {
+                const newResult = res.data.filter(result => thisComp.state.friends.indexOf(result) === -1);
+                thisComp.setState({
+                    results: newResult
+                });
+            }
+        });
+    }
 
     render() {
         return (
@@ -36,9 +43,10 @@ class SearchPeople extends Component {
                             uk-icon="icon: search"
                         />
                         <input
-                            onChange={this.inputChange}
+                            value={this.state.searchInput}
                             name="searchInput"
                             className="uk-input"
+                            onChange={this.handleInputChange} 
                             type="search"
                             placeholder="Search..."
                         />
