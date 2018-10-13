@@ -21,7 +21,7 @@ class PendingFriends extends Component {
                                 </td>
                                 <td className="uk-text-left table-80">
                                     <Link
-                                        to={friend.username}
+                                        to={"/profile/" + friend.username}
                                         className="uk-link-reset"
                                     >
                                         {friend.fullName}

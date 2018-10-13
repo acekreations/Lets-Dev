@@ -50,32 +50,24 @@ module.exports = {
             ]
         })
             .then(user => {
-                // console.log("user found:")
-                // console.log(user)
                 let friends = user.Friends;
-                // console.log("Friends")
-                // console.log(friends)
                 var friendsArray = [];
                 friends.forEach(friend => {
-                    console.log("request accepted (get requests)")
                     console.log(friend.Friendships.accepted)
                     if (
                         !friend.Friendships.accepted &&
                         friend.Friendships.request_from != req.params.id
                     ) {
-                        console.log("conditionals met")
                         let friendObject = {
                             username: friend.username,
-                            fullName: friend.full_name,
-                            imgUrl: friend.image,
+                            fullName: friend.fullName,
+                            imgUrl: friend.imageUrl,
                             activity: friend.activity,
                             id: friend.id
                         }
                         friendsArray.push(friendObject);
                     }
-                    console.log(friendsArray)
                 })
-                console.log(friendsArray);
                 res.json(friendsArray);
             })
             .catch(err => res.status(422).json(err));
