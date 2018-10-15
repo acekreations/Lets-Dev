@@ -14,7 +14,9 @@ router.route("/friends/:id").get(usersController.getFriends);
 router.route("/search/:query").get(usersController.findUsers);
 
 // Update Controller Route
-router.route("/update/:id").post(updateController.update);
+router.route("/updateNew/:id").post(updateController.updateNew);
+router.route("/updateCheck/:id").post(updateController.checkForUpdate);
+router.route("/compileUpdate/:id").post(updateController.compileActivity);
 
 // Requests Controller
 router.route("/request").post(requestsController.createRequest);

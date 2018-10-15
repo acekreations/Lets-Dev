@@ -32,9 +32,12 @@ class NavBar extends Component {
                                     </li>
                                     <li className="uk-nav-divider" />
                                     <li>
-                                        <p onClick={this.handleLogout}>
+                                        <Link
+                                            to={"#"}
+                                            onClick={this.handleLogout}
+                                        >
                                             Logout
-                                        </p>
+                                        </Link>
                                     </li>
                                 </ul>
                             </div>

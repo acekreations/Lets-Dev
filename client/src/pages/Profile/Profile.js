@@ -10,8 +10,7 @@ class Profile extends Component {
     state = {
         user: {},
         profileOwner: {},
-        rank: "",
-        globalRank: ""
+        friends: ""
     };
 
     componentDidMount() {
@@ -40,38 +39,18 @@ class Profile extends Component {
         });
     };
 
-    calculatePercentileFriends = () => {
+    getFriends = user => {
+        console.log(user);
         const thisComp = this;
-        API.displayFriends(this.state.profileOwner.id).then(function(array) {
-            array.push(thisComp.state.profileOwner);
-            array.sort(function(a, b) {
-                return a.activity - b.activity;
-            });
-            const userRank = array.findIndex(
-                item => item.username === thisComp.state.profileOwner.username
-            );
-            const total = array.length;
-            const percentile = (total - userRank) / userRank;
-            thisComp.setState({
-                rank: percentile
-            });
-        });
-    };
-
-    calculatePercentileGlobal = () => {
-        const thisComp = this;
-        API.search("").then(function(array) {
-            array.sort(function(a, b) {
-                return a.activity - b.activity;
-            });
-            const userRank = array.findIndex(
-                item => item.username === thisComp.state.profileOwner.username
-            );
-            const total = array.length;
-            const percentile = (total - userRank) / userRank;
-            thisComp.setState({
-                globalRank: percentile
-            });
+        API.displayFriends(user.id).then(function(friends) {
+            if (Array.isArray(friends)) {
+                friends.sort(function(a, b) {
+                    return a.activity - b.activity;
+                });
+                thisComp.setState({
+                    friends: friends
+                });
+            }
         });
     };
 
@@ -107,9 +86,8 @@ class Profile extends Component {
                         </li>
                     </ul>
                     <Stats
-                        actions={this.state.profileOwner.activity}
-                        rank={this.state.rank * 100 + "%"}
-                        globalRank={this.state.globalRank * 100 + "%"}
+                        friends={this.state.friends}
+                        user={this.state.user}
                     />
                 </div>
             </div>
