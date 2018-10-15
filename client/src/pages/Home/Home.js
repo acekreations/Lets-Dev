@@ -21,26 +21,29 @@ class Home extends Component {
 
     checkLogin = () => {
         if (cookies.get("user")) {
+            const user = cookies.get("user");
             this.setState({
-                user: cookies.get("user")
+                user: user
             });
-            console.log(cookies.get("user"));
-            this.getFriends();
-            API.updateActivity(this.state.user.id);
+            console.log("cookies: ", cookies.get("user"));
+            this.getFriends(user);
+            API.updateActivity(user.id);
         } else {
             window.location.replace("/");
         }
     };
 
-    getFriends = () => {
-        const thisComp = this;
-        API.displayFriends(this.state.user.id).then(function(friends) {
-            friends.sort(function(a, b) {
-                return a.activity - b.activity;
-            });
-            thisComp.setState({
-                friends: friends
-            });
+    getFriends = user => {
+        console.log(user);
+        API.displayFriends(user.id).then(function(friends) {
+            if (Array.isArray(friends)) {
+                friends.sort(function(a, b) {
+                    return a.activity - b.activity;
+                });
+                this.setState({
+                    friends: friends
+                });
+            }
         });
     };
 

@@ -1,21 +1,24 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import API from "../../utils/API";
+import { Cookies } from "react-cookie";
+
+const cookies = new Cookies();
 
 class PendingFriends extends Component {
-
-    acceptRequest = (arg) => {
+    acceptRequest = arg => {
         // grab from cookie
-        const userId = 1;
+        const user = cookies.get("user");
+        const userId = user.id;
         const friendId = arg;
-        console.log(arg)
+        console.log(arg);
         const data = {
             userId: userId,
             friendId: friendId
-        }
-        console.log(data)
-        API.acceptRequest(data).then(function(result) {})
-    }
+        };
+        console.log(data);
+        API.acceptRequest(data).then(function(result) {});
+    };
 
     render() {
         return (
@@ -43,7 +46,13 @@ class PendingFriends extends Component {
                                     </Link>
                                 </td>
                                 <td className="uk-text-center table-10">
-                                    <div onClick={ () => this.acceptRequest(friend.id)}><span uk-icon="icon: check" /></div>
+                                    <div
+                                        onClick={() =>
+                                            this.acceptRequest(friend.id)
+                                        }
+                                    >
+                                        <span uk-icon="icon: check" />
+                                    </div>
                                 </td>
                             </tr>
                         ))}

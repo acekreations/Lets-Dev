@@ -30,7 +30,7 @@ class NavBar extends Component {
                                     <li>
                                         <Link to={"/friends"}>Friends</Link>
                                     </li>
-                                    <li class="uk-nav-divider" />
+                                    <li className="uk-nav-divider" />
                                     <li>
                                         <p onClick={this.handleLogout}>
                                             Logout
