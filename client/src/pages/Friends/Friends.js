@@ -4,7 +4,9 @@ import SearchFriends from "../../components/SearchFriends";
 import PendingFriends from "../../components/PendingFriends";
 import API from "../../utils/API";
 import NavBar from "../../components/NavBar";
-// import Cookie from "react-cookie";
+import { Cookies } from "react-cookie";
+
+const cookies = new Cookies();
 
 class Friends extends Component {
     state = {
@@ -14,9 +16,20 @@ class Friends extends Component {
     };
 
     componentDidMount() {
-        this.loadFriends();
-        this.loadRequests();
+        this.checkLogin();
     }
+
+    checkLogin = () => {
+        if (cookies.get("user")) {
+            this.setState({
+                user: cookies.get("user")
+            });
+            this.loadFriends();
+            this.loadRequests();
+        } else {
+            window.location.replace("/");
+        }
+    };
 
     loadFriends = () => {
         const thisComp = this;
@@ -25,7 +38,7 @@ class Friends extends Component {
         API.displayFriends(userId).then(function(friends) {
             thisComp.setState({
                 friends: friends.data
-            })
+            });
         });
     };
 
@@ -33,19 +46,19 @@ class Friends extends Component {
         const thisComp = this;
         const userId = 1;
         API.displayRequests(userId).then(function(requests) {
-            console.log(requests.data[0])
+            console.log(requests.data[0]);
             thisComp.setState({
                 requests: requests.data
-            })
-        })
+            });
+        });
     };
 
     render() {
         return (
             <div>
-                <NavBar 
-                    fullName={this.state.user.fullName} 
-                    username={this.state.user.username} 
+                <NavBar
+                    fullName={this.state.user.fullName}
+                    username={this.state.user.username}
                     profileImage={this.state.user.imageUrl}
                 />
                 <div className="uk-container uk-container-xsmall">

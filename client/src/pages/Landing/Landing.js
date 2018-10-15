@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import "./Landing.css";
 import { Animated } from "react-animated-css";
 import { Cookies } from "react-cookie";
-import { queryString} from "query-string";
+import { queryString } from "query-string";
+import API from "../../utils/API";
 
 const cookies = new Cookies();
 
@@ -14,7 +15,9 @@ class Landing extends Component {
 
     componentDidMount() {
         this.typeTagLine();
-        this.handleAuth();
+        if (!cookies.get("user")) {
+            this.handleAuth();
+        }
     }
 
     typeTagLine = () => {
@@ -37,57 +40,56 @@ class Landing extends Component {
         const search = this.props.location.search;
         const params = new URLSearchParams(search);
         var access_token = params.get("access_token");
-        var login = params.get("login");
-        var name = params.get("name");
+        var username = params.get("login");
+        var fullName = params.get("name");
         var email = params.get("email");
-        var avatar_url = params.get("avatar_url");
-        
-        cookies.set("access_token", access_token, { path: '/'});
-        cookies.set("login", login, { path: '/'});
-        cookies.set("name", name, { path: '/'});
-        cookies.set("email", email, { path: '/'});
-        cookies.set("avatar_url", avatar_url, { path: '/'});
-       
-      // set state to authenticated if user access_token is stored  
-      if (access_token) {
-          this.setState({
-              isAuthenticated: true
-          });
-      }
-      else {
-        this.setState({
-            isAuthenticated: false
-        });
-      }
-    
+        var imageUrl = params.get("avatar_url");
+
+        let userData = {
+            username: username,
+            fullName: fullName,
+            email: email,
+            imageUrl: imageUrl
+        };
+
+        this.signUp(userData);
+
+        // set state to authenticated if user access_token is stored
+        if (access_token) {
+            this.setState({
+                isAuthenticated: true
+            });
+        } else {
+            this.setState({
+                isAuthenticated: false
+            });
+        }
     };
 
-
-    handleLogout = () => {
-        cookies.remove("access_token", { path: '/'});
-        cookies.remove("login", { path: '/'});
-        cookies.remove("name", { path: '/'});
-        cookies.remove("email", { path: '/'});
-        cookies.remove("avatar_url", { path: '/'});
-        this.setState({
-            isAuthenticated: false
-        });
-        this.props.history.replace("/");
-
-    };
-
-
-
-
-    login = () => {
-        API.login().then(function() {
-            //do stuff
+    signUp = userData => {
+        const thisComp = this;
+        console.log("\n SIGN UP FUNCTION STARTS \n");
+        console.log(userData);
+        API.signUp(userData).then(function(err, res) {
+            if (err) {
+                thisComp.login(userData.username);
+            } else {
+                API.updateActivity(res.data.id);
+                cookies.set("user", res.data, { path: "/" }).then(function() {
+                    window.location.replace("/home");
+                });
+            }
         });
     };
 
-    signup = (userData) => {
-        API.signup.then(function(userData) {
-            //do stuff
+    login = username => {
+        API.login(username).then(function(err, res) {
+            if (err) throw err;
+            //if success, store info in cookie
+            API.updateActivity(res.data.id);
+            cookies.set("user", res.data, { path: "/" }).then(function() {
+                window.location.replace("/home");
+            });
         });
     };
 
@@ -102,14 +104,12 @@ class Landing extends Component {
                         >
                             Features
                         </a>
-                         {this.state.isAuthenticated
-                        ?<button className="uk-margin-top landingBtn" onClick={this.handleLogout}>
-                        Log Out
-                        </button>
-                        :<a className="uk-margin-top landingBtn" href="https://github.com/login/oauth/authorize?client_id=3c9aad92df4d73f9b61b">
-                        Sign In
+                        <a
+                            className="uk-margin-top landingBtn"
+                            href="https://github.com/login/oauth/authorize?client_id=9988a9f4ea38fbb0c35e"
+                        >
+                            Sign In
                         </a>
-                        }
                     </div>
                     <div
                         id="callToAction"

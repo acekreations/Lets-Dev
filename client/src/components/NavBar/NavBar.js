@@ -1,8 +1,17 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import "./NavBar.css";
+import { Cookies } from "react-cookie";
+const cookies = new Cookies();
 
 class NavBar extends Component {
+    handleLogout = () => {
+        cookies.remove("user", { path: "/" });
+        this.setState({
+            isAuthenticated: false
+        });
+        this.props.history.replace("/");
+    };
 
     render() {
         return (
@@ -10,9 +19,9 @@ class NavBar extends Component {
                 <div className="uk-navbar-left">
                     <ul className="uk-navbar-nav">
                         <li>
-                            <a href="#">
+                            <button className="noStyleBtn">
                                 <span uk-icon="icon: menu; ratio: 1.3" />
-                            </a>
+                            </button>
                             <div
                                 className="uk-navbar-dropdown"
                                 uk-dropdown="mode: click; offset: -15; flip: true;"
@@ -23,6 +32,15 @@ class NavBar extends Component {
                                     </li>
                                     <li>
                                         <Link to={"/friends"}>Friends</Link>
+                                    </li>
+                                    <li class="uk-nav-divider" />
+                                    <li>
+                                        <Link
+                                            to={"/"}
+                                            onClick={this.handleLogout}
+                                        >
+                                            Logout
+                                        </Link>
                                     </li>
                                 </ul>
                             </div>
