@@ -75,9 +75,8 @@ class Landing extends Component {
                 thisComp.login(userData.username);
             } else {
                 API.updateActivity(res.data.id);
-                cookies.set("user", res.data, { path: "/" }).then(function() {
-                    window.location.replace("/home");
-                });
+                cookies.set("user", res.data, { path: "/" });
+                window.location.replace("/home");
             }
         });
     };
@@ -87,9 +86,8 @@ class Landing extends Component {
             if (err) throw err;
             //if success, store info in cookie
             API.updateActivity(res.data.id);
-            cookies.set("user", res.data, { path: "/" }).then(function() {
-                window.location.replace("/home");
-            });
+            cookies.set("user", res.data, { path: "/" });
+            window.location.replace("/home");
         });
     };
 
