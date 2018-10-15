@@ -73,7 +73,7 @@ class Landing extends Component {
         console.log(userData);
         API.signUp(userData)
             .then(function(res) {
-                API.updateActivity(res.data.id);
+                // API.updateActivity(res.data.id);
                 cookies.set("user", res.data, {
                     path: "/"
                 });
@@ -88,7 +88,7 @@ class Landing extends Component {
         API.login(username)
             .then(function(res) {
                 //if success, store info in cookie
-                API.updateActivity(res.data.id);
+                // API.updateActivity(res.data.id);
                 cookies.set("user", res.data, {
                     path: "/"
                 });
