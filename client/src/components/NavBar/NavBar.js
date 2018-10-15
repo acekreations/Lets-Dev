@@ -7,9 +7,6 @@ const cookies = new Cookies();
 class NavBar extends Component {
     handleLogout = () => {
         cookies.remove("user", { path: "/" });
-        this.setState({
-            isAuthenticated: false
-        });
         this.props.history.replace("/");
     };
 
@@ -28,19 +25,16 @@ class NavBar extends Component {
                             >
                                 <ul className="uk-nav uk-dropdown-nav">
                                     <li>
-                                        <Link to={"/"}>Home</Link>
+                                        <Link to={"/home"}>Home</Link>
                                     </li>
                                     <li>
                                         <Link to={"/friends"}>Friends</Link>
                                     </li>
                                     <li class="uk-nav-divider" />
                                     <li>
-                                        <Link
-                                            to={"/"}
-                                            onClick={this.handleLogout}
-                                        >
+                                        <p onClick={this.handleLogout}>
                                             Logout
-                                        </Link>
+                                        </p>
                                     </li>
                                 </ul>
                             </div>
@@ -48,7 +42,7 @@ class NavBar extends Component {
                     </ul>
                 </div>
                 <div className="uk-navbar-center">
-                    <a className="uk-link-reset" href="/">
+                    <a className="uk-link-reset" href="/home">
                         <h3>Lets_Dev</h3>
                     </a>
                 </div>

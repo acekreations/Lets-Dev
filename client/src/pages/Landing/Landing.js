@@ -74,7 +74,9 @@ class Landing extends Component {
         API.signUp(userData)
             .then(function(res) {
                 API.updateActivity(res.data.id);
-                cookies.set("user", res.data, { path: "/" });
+                cookies.set("user", res.data, {
+                    path: "/"
+                });
                 window.location.replace("/home");
             })
             .catch(err => {
@@ -87,12 +89,22 @@ class Landing extends Component {
             .then(function(res) {
                 //if success, store info in cookie
                 API.updateActivity(res.data.id);
-                cookies.set("user", res.data, { path: "/" });
+                cookies.set("user", res.data, {
+                    path: "/"
+                });
                 window.location.replace("/home");
             })
             .catch(err => {
                 console.log(err);
             });
+    };
+
+    checkAllForUpdates = () => {
+        API.search("").then(function(res) {
+            res.forEach(user => {
+                API.updateActivity(user.id);
+            });
+        });
     };
 
     render() {
