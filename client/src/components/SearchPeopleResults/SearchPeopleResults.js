@@ -2,11 +2,15 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import "./SearchPeopleResults.css";
 import API from "../../utils/API";
+import { Cookies } from "react-cookie";
+
+const cookies = new Cookies();
 
 class SearchPeopleResults extends Component {
     createRequest = arg => {
         // grab from cookie
-        const userId = 1;
+        const user = cookies.get("user");
+        const userId = user.id;
         const friendId = arg;
         console.log(arg);
         const data = {
