@@ -49,7 +49,8 @@ class Landing extends Component {
             username: username,
             fullName: fullName,
             email: email,
-            imageUrl: imageUrl
+            imageUrl: imageUrl,
+            access_token: access_token
         };
 
         this.signUp(userData);
@@ -70,25 +71,28 @@ class Landing extends Component {
         const thisComp = this;
         console.log("\n SIGN UP FUNCTION STARTS \n");
         console.log(userData);
-        API.signUp(userData).then(function(err, res) {
-            if (err) {
-                thisComp.login(userData.username);
-            } else {
+        API.signUp(userData)
+            .then(function(res) {
                 API.updateActivity(res.data.id);
                 cookies.set("user", res.data, { path: "/" });
                 window.location.replace("/home");
-            }
-        });
+            })
+            .catch(err => {
+                thisComp.login(userData.username);
+            });
     };
 
     login = username => {
-        API.login(username).then(function(err, res) {
-            if (err) throw err;
-            //if success, store info in cookie
-            API.updateActivity(res.data.id);
-            cookies.set("user", res.data, { path: "/" });
-            window.location.replace("/home");
-        });
+        API.login(username)
+            .then(function(res) {
+                //if success, store info in cookie
+                API.updateActivity(res.data.id);
+                cookies.set("user", res.data, { path: "/" });
+                window.location.replace("/home");
+            })
+            .catch(err => {
+                console.log(err);
+            });
     };
 
     render() {
