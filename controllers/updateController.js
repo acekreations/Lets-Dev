@@ -156,29 +156,20 @@ function runUpdates(
                 res
             );
         } else if (eventDay < checkedLast) {
-            const updateDay = async () => {
-                // calculates activity score
-                const res = await dailyActivityUpdate(
-                    checkedLast,
-                    userId,
-                    dailyActivityCount,
-                    res
-                );
+            // calculates activity score
+            dailyActivityUpdate(checkedLast, userId, dailyActivityCount, res);
 
-                dailyActivityCount = 1;
-                checkedLast = eventDay;
-                eventsArray.shift();
-                runUpdates(
-                    lastUpdate,
-                    checkedLast,
-                    dailyActivityCount,
-                    eventsArray,
-                    userId,
-                    res
-                );
-            };
-
-            updateDay();
+            dailyActivityCount = 1;
+            checkedLast = eventDay;
+            eventsArray.shift();
+            runUpdates(
+                lastUpdate,
+                checkedLast,
+                dailyActivityCount,
+                eventsArray,
+                userId,
+                res
+            );
         }
     } else {
         return res.json("complete");
