@@ -24,15 +24,15 @@ class Stats extends Component {
     };
 
     calculatePercentileFriends = () => {
-        const array = this.state.friends;
-        array.push(this.state.user);
-        array.sort(function(a, b) {
+        const arr = this.state.friends;
+        arr.push(this.state.user);
+        arr.sort(function(a, b) {
             return a.activity - b.activity;
         });
-        const userRank = array.findIndex(
+        const userRank = arr.findIndex(
             item => item.username === this.state.user.username
         );
-        const total = array.length;
+        const total = arr.length;
         const percentile = (total - userRank) / userRank;
         this.setState({
             rank: percentile
@@ -41,14 +41,14 @@ class Stats extends Component {
 
     calculatePercentileGlobal = () => {
         const thisComp = this;
-        API.search("").then(function(array) {
-            array.sort(function(a, b) {
+        API.search("").then(function(arr) {
+            arr.sort(function(a, b) {
                 return a.activity - b.activity;
             });
-            const userRank = array.findIndex(
+            const userRank = arr.findIndex(
                 item => item.username === thisComp.state.user.username
             );
-            const total = array.length;
+            const total = arr.length;
             const percentile = (total - userRank) / userRank;
             thisComp.setState({
                 globalRank: percentile

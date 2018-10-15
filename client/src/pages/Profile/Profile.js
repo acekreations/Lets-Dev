@@ -10,7 +10,7 @@ class Profile extends Component {
     state = {
         user: {},
         profileOwner: {},
-        friends: ""
+        friends: []
     };
 
     componentDidMount() {
