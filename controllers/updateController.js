@@ -13,6 +13,12 @@ octokit.repos
         // handle data
     });
 
+octokit.authenticate({
+    type: "oauth",
+    key: "9988a9f4ea38fbb0c35e",
+    secret: "f941956fb880afd903d41e1558009974a317f28a"
+});
+
 function convertDate(dateString) {
     result = moment(dateString).format("YYYY-MM-DD");
     return result;
@@ -238,7 +244,6 @@ function updateActivityScore(userId) {
             UserId: userId
         }
     }).then(result => {
-
         const update = async () => {
             // calculates activity score
             const activityScore = await compoundActivity(result);
