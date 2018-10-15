@@ -24,6 +24,7 @@ class Home extends Component {
             this.setState({
                 user: cookies.get("user")
             });
+            console.log(cookies.get("user"));
             this.getFriends();
             API.updateActivity(this.state.user.id);
         } else {
