@@ -73,11 +73,23 @@ class Landing extends Component {
         console.log(userData);
         API.signUp(userData)
             .then(function(res) {
-                // API.updateActivity(res.data.id);
+                const userId = res.data.id;
+                API.updateNew(userId)
+                    .then(res => {
+                        API.compileActivity(userId)
+                            .then(res => {
+                                window.location.replace("/home");
+                            })
+                            .catch(err => {
+                                console.log(err);
+                            });
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
                 cookies.set("user", res.data, {
                     path: "/"
                 });
-                window.location.replace("/home");
             })
             .catch(err => {
                 thisComp.login(userData.username);
@@ -88,24 +100,36 @@ class Landing extends Component {
         API.login(username)
             .then(function(res) {
                 //if success, store info in cookie
-                // API.updateActivity(res.data.id);
+                const userId = res.data.id;
+                API.checkUpdates(userId)
+                    .then(res => {
+                        API.compileActivity(userId)
+                            .then(res => {
+                                window.location.replace("/home");
+                            })
+                            .catch(err => {
+                                console.log(err);
+                            });
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
                 cookies.set("user", res.data, {
                     path: "/"
                 });
-                window.location.replace("/home");
             })
             .catch(err => {
                 console.log(err);
             });
     };
 
-    checkAllForUpdates = () => {
-        API.search("").then(function(res) {
-            res.forEach(user => {
-                API.updateActivity(user.id);
-            });
-        });
-    };
+    // checkAllForUpdates = () => {
+    //     API.search("").then(function(res) {
+    //         res.forEach(user => {
+    //             API.updateActivity(user.id);
+    //         });
+    //     });
+    // };
 
     render() {
         return (
