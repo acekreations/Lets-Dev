@@ -8,21 +8,35 @@ class Rank extends Component {
                 <thead>
                     <tr>
                         <th>Rank</th>
-                        <th></th>
-                        <th></th>
+                        <th />
+                        <th />
                         <th>Activity</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td className="uk-width-auto">{this.props.rank}</td>
-                        <td className="uk-width-auto"><img className="profileImage" alt="profile" src={this.props.profileImage}></img></td>
-                        <td className="uk-width-expand uk-text-left"><Link to={"/"} className="uk-link-reset">{this.props.name}</Link></td>
-                        <td className="uk-width-auto uk-text-right">{this.props.activity}</td>
-                    </tr>
+                    {this.props.friends.map((item, index) => (
+                        <tr key={index}>
+                            <td className="uk-width-auto">{item.fullName}</td>
+                            <td className="uk-width-auto">
+                                <img
+                                    className="profileImage"
+                                    alt="profile"
+                                    src={item.profileImage}
+                                />
+                            </td>
+                            <td className="uk-width-expand uk-text-left">
+                                <Link
+                                    to={"/profile" + item.username}
+                                    className="uk-link-reset"
+                                >
+                                    {item.fullName}
+                                </Link>
+                            </td>
+                        </tr>
+                    ))}
                 </tbody>
             </table>
-        )
+        );
     }
 }
 

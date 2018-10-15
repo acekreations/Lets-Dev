@@ -34,6 +34,9 @@ class Home extends Component {
     getFriends = () => {
         const thisComp = this;
         API.displayFriends(this.state.user.id).then(function(friends) {
+            friends.sort(function(a, b) {
+                return a.activity - b.activity;
+            });
             thisComp.setState({
                 friends: friends
             });
@@ -46,7 +49,9 @@ class Home extends Component {
         array.sort(function(a, b) {
             return a.activity - b.activity;
         });
-        const userRank = array.indexOf(this.state.user);
+        const userRank = array.findIndex(
+            item => item.username === this.state.user.username
+        );
         const total = array.length;
         const percentile = (total - userRank) / userRank;
         this.setState({
@@ -60,7 +65,9 @@ class Home extends Component {
             array.sort(function(a, b) {
                 return a.activity - b.activity;
             });
-            const userRank = array.indexOf(thisComp.state.user);
+            const userRank = array.findIndex(
+                item => item.username === thisComp.state.user.username
+            );
             const total = array.length;
             const percentile = (total - userRank) / userRank;
             thisComp.setState({
@@ -80,16 +87,11 @@ class Home extends Component {
                 <div className="uk-container uk-container-xsmall">
                     <Stats
                         actions={this.state.user.activity}
-                        rank="4"
-                        globalRank="1286"
+                        rank={this.state.rank * 100 + "%"}
+                        globalRank={this.state.globalRank * 100 + "%"}
                     />
                     <div className="uk-section uk-section-default uk-margin-large-top uk-padding-remove">
-                        <Rank
-                            name="Denise Smith"
-                            activity="212"
-                            rank="1"
-                            profileImage="https://via.placeholder.com/64x64"
-                        />
+                        <Rank friends={this.state.friends} />
                     </div>
                 </div>
             </div>

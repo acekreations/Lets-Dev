@@ -1,8 +1,20 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import "./SearchPeopleResults.css";
+import API from "../../utils/API";
 
 class SearchPeopleResults extends Component {
+    createRequest = arg => {
+        // grab from cookie
+        const userId = 1;
+        const friendId = arg;
+        console.log(arg);
+        const data = {
+            userId: userId,
+            friendId: friendId
+        };
+        API.createRequest(data).then(function(result) {});
+    };
 
     render() {
         return (
@@ -15,12 +27,17 @@ class SearchPeopleResults extends Component {
                     />
                 </td>
                 <td className="uk-text-left table-80">
-                    <Link to={"/profile/" + this.props.username} className="uk-link-reset">
+                    <Link
+                        to={"/profile/" + this.props.username}
+                        className="uk-link-reset"
+                    >
                         {this.props.fullName}
                     </Link>
                 </td>
                 <td className="uk-text-center table-10">
-                    <span uk-icon="plus" />
+                    <div onClick={() => this.createRequest(this.props.id)}>
+                        <span uk-icon="plus" />
+                    </div>
                 </td>
             </tr>
         );

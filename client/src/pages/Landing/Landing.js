@@ -83,21 +83,14 @@ class Landing extends Component {
     };
 
     login = username => {
-        API.login(username).then(function(res) {
+        API.login(username).then(function(err, res) {
+            if (err) throw err;
             //if success, store info in cookie
             API.updateActivity(res.data.id);
             cookies.set("user", res.data, { path: "/" }).then(function() {
                 window.location.replace("/home");
             });
         });
-    };
-
-    handleLogout = () => {
-        cookies.remove("user", { path: "/" });
-        this.setState({
-            isAuthenticated: false
-        });
-        this.props.history.replace("/");
     };
 
     render() {
@@ -111,21 +104,12 @@ class Landing extends Component {
                         >
                             Features
                         </a>
-                        {this.state.isAuthenticated ? (
-                            <button
-                                className="uk-margin-top landingBtn"
-                                onClick={this.handleLogout}
-                            >
-                                Log Out
-                            </button>
-                        ) : (
-                            <a
-                                className="uk-margin-top landingBtn"
-                                href="https://github.com/login/oauth/authorize?client_id=3c9aad92df4d73f9b61b"
-                            >
-                                Sign In
-                            </a>
-                        )}
+                        <a
+                            className="uk-margin-top landingBtn"
+                            href="https://github.com/login/oauth/authorize?client_id=9988a9f4ea38fbb0c35e"
+                        >
+                            Sign In
+                        </a>
                     </div>
                     <div
                         id="callToAction"

@@ -9,7 +9,9 @@ const cookies = new Cookies();
 class Profile extends Component {
     state = {
         user: {},
-        profileOwner: {}
+        profileOwner: {},
+        rank: "",
+        globalRank: ""
     };
 
     componentDidMount() {
@@ -34,6 +36,41 @@ class Profile extends Component {
             console.log(res);
             thisComp.setState({
                 profileOwner: res.data
+            });
+        });
+    };
+
+    calculatePercentileFriends = () => {
+        const thisComp = this;
+        API.displayFriends(this.state.profileOwner.id).then(function(array) {
+            array.push(thisComp.state.profileOwner);
+            array.sort(function(a, b) {
+                return a.activity - b.activity;
+            });
+            const userRank = array.findIndex(
+                item => item.username === thisComp.state.profileOwner.username
+            );
+            const total = array.length;
+            const percentile = (total - userRank) / userRank;
+            thisComp.setState({
+                rank: percentile
+            });
+        });
+    };
+
+    calculatePercentileGlobal = () => {
+        const thisComp = this;
+        API.search("").then(function(array) {
+            array.sort(function(a, b) {
+                return a.activity - b.activity;
+            });
+            const userRank = array.findIndex(
+                item => item.username === thisComp.state.profileOwner.username
+            );
+            const total = array.length;
+            const percentile = (total - userRank) / userRank;
+            thisComp.setState({
+                globalRank: percentile
             });
         });
     };
@@ -71,8 +108,8 @@ class Profile extends Component {
                     </ul>
                     <Stats
                         actions={this.state.profileOwner.activity}
-                        rank="4"
-                        globalRank="1286"
+                        rank={this.state.rank * 100 + "%"}
+                        globalRank={this.state.globalRank * 100 + "%"}
                     />
                 </div>
             </div>
