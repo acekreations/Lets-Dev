@@ -12,12 +12,24 @@ class Home extends Component {
         user: {},
         friends: [],
         rank: "",
-        globalRank: ""
+        globalRank: "",
+        activity: ""
     };
 
     componentDidMount() {
         this.checkLogin();
+        this.loadActivity(cookies.get("user").username);
     }
+
+    loadActivity = username => {
+        const thisComp = this;
+        API.getUserProfile(username).then(res => {
+            console.log(res);
+            thisComp.setState({
+                activity: res.data.activity
+            });
+        });
+    };
 
     checkLogin = () => {
         if (cookies.get("user")) {
@@ -35,12 +47,13 @@ class Home extends Component {
 
     getFriends = user => {
         console.log(user);
+        const thisComp = this;
         API.displayFriends(user.id).then(function(friends) {
             if (Array.isArray(friends)) {
                 friends.sort(function(a, b) {
                     return a.activity - b.activity;
                 });
-                this.setState({
+                thisComp.setState({
                     friends: friends
                 });
             }
