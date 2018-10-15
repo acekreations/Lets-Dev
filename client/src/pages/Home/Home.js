@@ -36,7 +36,7 @@ class Home extends Component {
             });
             console.log("cookies: ", cookies.get("user"));
             this.getFriends(user);
-            API.updateActivity(user.id);
+            //API.updateActivity(user.id);
         } else {
             window.location.replace("/");
         }
