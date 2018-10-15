@@ -12,35 +12,51 @@ class Home extends Component {
         user: {},
         friends: [],
         rank: "",
-        globalRank: ""
+        globalRank: "",
+        activity: ""
     };
 
     componentDidMount() {
         this.checkLogin();
+        this.loadActivity(cookies.get("user").username);
     }
+
+    loadActivity = username => {
+        const thisComp = this;
+        API.getUserProfile(username).then(res => {
+            console.log(res);
+            thisComp.setState({
+                activity: res.data.activity
+            });
+        });
+    };
 
     checkLogin = () => {
         if (cookies.get("user")) {
+            const user = cookies.get("user");
             this.setState({
-                user: cookies.get("user")
+                user: user
             });
-            console.log(cookies.get("user"));
-            this.getFriends();
-            API.updateActivity(this.state.user.id);
+            console.log("cookies: ", cookies.get("user"));
+            this.getFriends(user);
+            API.updateActivity(user.id);
         } else {
             window.location.replace("/");
         }
     };
 
-    getFriends = () => {
+    getFriends = user => {
+        console.log(user);
         const thisComp = this;
-        API.displayFriends(this.state.user.id).then(function(friends) {
-            friends.sort(function(a, b) {
-                return a.activity - b.activity;
-            });
-            thisComp.setState({
-                friends: friends
-            });
+        API.displayFriends(user.id).then(function(friends) {
+            if (Array.isArray(friends)) {
+                friends.sort(function(a, b) {
+                    return a.activity - b.activity;
+                });
+                thisComp.setState({
+                    friends: friends
+                });
+            }
         });
     };
 
