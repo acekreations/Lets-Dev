@@ -7,8 +7,14 @@ export default {
     displayFriends: function(id) {
         return axios.get("/api/friends/" + id);
     },
-    updateActivity: function(id) {
-        return axios.post("/api/update/" + id);
+    checkUpdates: function(id) {
+        return axios.post("/api/updateCheck/" + id);
+    },
+    updateNew: function(id) {
+        return axios.post("/api/updateNew/" + id);
+    },
+    compileActivity: function(id) {
+        return axios.post("/api/compileUpdate/" + id);
     },
     createRequest: function(req) {
         //post obj to req.body. user id friend id

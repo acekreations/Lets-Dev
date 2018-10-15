@@ -21,16 +21,18 @@ class SearchPeople extends Component {
 
     searchPeople = () => {
         const thisComp = this;
-        this.setState({ results: []})
-        API.search(this.state.searchInput).then(function (res) {
+        this.setState({ results: [] });
+        API.search(this.state.searchInput).then(function(res) {
             if (thisComp.state.searchInput.length > 1) {
-                const newResult = res.data.filter(result => thisComp.state.friends.indexOf(result) === -1);
+                const newResult = res.data.filter(
+                    result => thisComp.state.friends.indexOf(result) === -1
+                );
                 thisComp.setState({
                     results: newResult
                 });
             }
         });
-    }
+    };
 
     render() {
         return (
@@ -46,7 +48,7 @@ class SearchPeople extends Component {
                             value={this.state.searchInput}
                             name="searchInput"
                             className="uk-input"
-                            onChange={this.handleInputChange} 
+                            onChange={this.handleInputChange}
                             type="search"
                             placeholder="Search..."
                         />
@@ -55,7 +57,15 @@ class SearchPeople extends Component {
                     <div className="uk-text-center uk-flex uk-flex-around uk-flex-middle">
                         <table className="uk-table uk-table-divider uk-table-middle uk-margin-top">
                             <tbody>
-                                {this.state.results.map(result => <SearchPeopleResults key={result.id} fullName={result.fullName} imageUrl={result.imageUrl} username={result.username}/>)}
+                                {this.state.results.map(result => (
+                                    <SearchPeopleResults
+                                        key={result.id}
+                                        fullName={result.fullName}
+                                        imageUrl={result.imageUrl}
+                                        username={result.username}
+                                        id={result.id}
+                                    />
+                                ))}
                             </tbody>
                         </table>
                     </div>

@@ -10,10 +10,7 @@ const cookies = new Cookies();
 class Home extends Component {
     state = {
         user: {},
-        friends: [],
-        rank: "",
-        globalRank: "",
-        activity: ""
+        friends: []
     };
 
     componentDidMount() {
@@ -60,39 +57,6 @@ class Home extends Component {
         });
     };
 
-    calculatePercentileFriends = () => {
-        const array = this.state.friends;
-        array.push(this.state.user);
-        array.sort(function(a, b) {
-            return a.activity - b.activity;
-        });
-        const userRank = array.findIndex(
-            item => item.username === this.state.user.username
-        );
-        const total = array.length;
-        const percentile = (total - userRank) / userRank;
-        this.setState({
-            rank: percentile
-        });
-    };
-
-    calculatePercentileGlobal = () => {
-        const thisComp = this;
-        API.search("").then(function(array) {
-            array.sort(function(a, b) {
-                return a.activity - b.activity;
-            });
-            const userRank = array.findIndex(
-                item => item.username === thisComp.state.user.username
-            );
-            const total = array.length;
-            const percentile = (total - userRank) / userRank;
-            thisComp.setState({
-                globalRank: percentile
-            });
-        });
-    };
-
     render() {
         return (
             <div>
@@ -103,7 +67,8 @@ class Home extends Component {
                 />
                 <div className="uk-container uk-container-xsmall">
                     <Stats
-                        actions={this.state.user.activity}
+                        friends={this.state.friends}
+                        user={this.state.user}
                         rank={this.state.rank * 100 + "%"}
                         globalRank={this.state.globalRank * 100 + "%"}
                     />

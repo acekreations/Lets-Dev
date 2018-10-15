@@ -25,15 +25,58 @@ function convertDate(dateString) {
 }
 
 module.exports = {
-    update: function(req, res) {
-        checkForUpdate(req.params.id);
-        res.json("Update Checked");
+    updateNew: function(req, res) {
+        updateNew(req.params.id, res);
+    },
+
+    checkForUpdate: function(req, res) {
+        checkForUpdate(req.params.id, res);
+    },
+
+    compileActivity: function(req, res) {
+        updateActivityScore(req.params.id, res);
     }
 };
 
 // Functions called within update
 
-function checkForUpdate(userId) {
+function updateNew(userId, res) {
+    console.log(
+        "::::::::::::::::::::::::::::::::::::CHECKPOINT 0.0::::::::::::::::::::::::::::::::::::"
+    );
+
+    db.Users.findOne({
+        where: {
+            id: userId
+        }
+    }).then(user => {
+        const username = user.username;
+
+        octokit.activity
+            .getEventsForUser({ username, per_page, page })
+            .then(result => {
+                console.log(
+                    "::::::::::::::::::::::::::::::::::::CHECKPOINT 1.0::::::::::::::::::::::::::::::::::::"
+                );
+
+                const range = convertDate(moment().subtract(30, "days"));
+                const today = convertDate(moment());
+                let dailyActivityCount = 0;
+                const events = result.data;
+
+                runUpdates(
+                    range,
+                    today,
+                    dailyActivityCount,
+                    events,
+                    userId,
+                    res
+                );
+            });
+    });
+}
+
+function checkForUpdate(userId, res) {
     console.log(
         "::::::::::::::::::::::::::::::::::::CHECKPOINT 0.0::::::::::::::::::::::::::::::::::::"
     );
@@ -46,19 +89,19 @@ function checkForUpdate(userId) {
 
         // If user has not been updated in the last day, run update
         if (moment().subtract(1, "days") < moment(lastUpdate)) {
-            initializeUpdate(user, userId);
+            initializeUpdate(user, userId, lastUpdate, res);
+        } else {
+            res.json("No Update Necessary");
         }
     });
 }
 
 // Called First
-function initializeUpdate(user, userId) {
+function initializeUpdate(user, userId, lastUpdate, res) {
     // OctoKit call for user's events
     let username = user.username;
     let per_page = 100;
     let page = 1;
-
-    var created = convertDate(user.createdAt);
 
     octokit.activity
         .getEventsForUser({ username, per_page, page })
@@ -71,24 +114,14 @@ function initializeUpdate(user, userId) {
             var today = convertDate(moment());
             var dailyActivityCount = 0;
 
-            if (moment().subtract(1, "days") < moment(created)) {
-                extendedRange = convertDate(moment().subtract(30, "days"));
-                runUpdates(
-                    extendedRange,
-                    today,
-                    dailyActivityCount,
-                    events,
-                    userId
-                );
-            } else {
-                runUpdates(
-                    lastUpdate,
-                    today,
-                    dailyActivityCount,
-                    events,
-                    userId
-                );
-            }
+            runUpdates(
+                lastUpdate,
+                today,
+                dailyActivityCount,
+                events,
+                userId,
+                res
+            );
         });
 }
 
@@ -98,7 +131,8 @@ function runUpdates(
     checkedLast,
     dailyActivityCount,
     eventsArray,
-    userId
+    userId,
+    res
 ) {
     console.log(
         "::::::::::::::::::::::::::::::::::::CHECKPOINT 2.0::::::::::::::::::::::::::::::::::::"
@@ -118,32 +152,41 @@ function runUpdates(
                 checkedLast,
                 dailyActivityCount,
                 eventsArray,
-                userId
+                userId,
+                res
             );
         } else if (eventDay < checkedLast) {
-            dailyActivityUpdate(checkedLast, userId, dailyActivityCount);
-            dailyActivityCount = 1;
-            checkedLast = eventDay;
-            eventsArray.shift();
-            runUpdates(
-                lastUpdate,
-                checkedLast,
-                dailyActivityCount,
-                eventsArray,
-                userId
-            );
+            const updateDay = async () => {
+                // calculates activity score
+                const res = await dailyActivityUpdate(
+                    checkedLast,
+                    userId,
+                    dailyActivityCount,
+                    res
+                );
+
+                dailyActivityCount = 1;
+                checkedLast = eventDay;
+                eventsArray.shift();
+                runUpdates(
+                    lastUpdate,
+                    checkedLast,
+                    dailyActivityCount,
+                    eventsArray,
+                    userId,
+                    res
+                );
+            };
+
+            updateDay();
         }
     } else {
-        setTimeout(waitForDB, 20000);
-
-        function waitForDB() {
-            updateActivityScore(userId);
-        }
+        return res.json("complete");
     }
 }
 
 // called third
-function dailyActivityUpdate(date, userId, activity) {
+function dailyActivityUpdate(date, userId, activity, res) {
     console.log(
         "::::::::::::::::::::::::::::::::::::CHECKPOINT 3.0::::::::::::::::::::::::::::::::::::"
     );
@@ -162,7 +205,7 @@ function dailyActivityUpdate(date, userId, activity) {
                 date: date
             }).then(() =>
                 // Rerun function
-                dailyActivityUpdate(date, userId, activity)
+                dailyActivityUpdate(date, userId, activity, res)
             );
         } else {
             // Check if UsersDays relationship exists
@@ -174,9 +217,17 @@ function dailyActivityUpdate(date, userId, activity) {
             }).then(userDay => {
                 //if not
                 if (!userDay) {
-                    createUserDay(day.id, userId, activity);
+                    createUserDay(day.id, userId, activity, res).then(
+                        response => {
+                            return response;
+                        }
+                    );
                 } else {
-                    updateUserDay(day.id, userId, activity);
+                    updateUserDay(day.id, userId, activity, res).then(
+                        response => {
+                            return response;
+                        }
+                    );
                 }
             });
         }
@@ -185,7 +236,7 @@ function dailyActivityUpdate(date, userId, activity) {
 
 // create user day relationship
 // called fourth
-function createUserDay(dayId, userId, activity) {
+function createUserDay(dayId, userId, activity, res) {
     console.log(
         "::::::::::::::::::::::::::::::::::::CHECKPOINT 4.0::::::::::::::::::::::::::::::::::::"
     );
@@ -204,13 +255,13 @@ function createUserDay(dayId, userId, activity) {
             }
         })
             .then(day => user.setDays([day]))
-            .then(() => updateUserDay(dayId, userId, activity))
+            .then(res => updateUserDay(dayId, userId, activity, res))
     );
 }
 
 // Update Activity for day
 // called fifth
-function updateUserDay(dayId, userId, activity) {
+function updateUserDay(dayId, userId, activity, res) {
     console.log(
         "::::::::::::::::::::::::::::::::::::CHECKPOINT 5.0::::::::::::::::::::::::::::::::::::"
     );
@@ -228,12 +279,14 @@ function updateUserDay(dayId, userId, activity) {
                 UserId: userId
             }
         }
-    );
+    ).then(res => {
+        return res;
+    });
 }
 
 // Generate a user's activity score
 // called last
-function updateActivityScore(userId) {
+function updateActivityScore(userId, res) {
     console.log(
         "::::::::::::::::::::::::::::::::::::CHECKPOINT 6.0::::::::::::::::::::::::::::::::::::"
     );
@@ -260,10 +313,9 @@ function updateActivityScore(userId) {
                 }
             ).then(finalResult =>
                 // res.json(finalResult)
-                console.log("success")
+                res.json(finalResult)
             );
         };
-
         update();
     });
 }

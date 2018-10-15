@@ -11,8 +11,7 @@ module.exports = (sequelize, DataTypes) => {
             unique: false
         },
         email: {
-            type: DataTypes.STRING,
-            unique: true
+            type: DataTypes.STRING
         },
         activity: {
             type: DataTypes.INTEGER,
