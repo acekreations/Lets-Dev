@@ -57,7 +57,7 @@ module.exports = function(app) {
 
                             // redirect back to home page and pass data in params in url
                             res.redirect(
-                                "/home?access_token=" +
+                                "/?access_token=" +
                                     access_token +
                                     "&login=" +
                                     login +
