@@ -75,25 +75,55 @@ class Stats extends Component {
     //     });
     // };
 
+    // calculatePercentileGlobal = () => {
+    //     const thisComp = this;
+    //     API.getAllUsers().then(function(arr) {
+    //         // console.log(arr.data)
+    //         arr = arr.data;
+    //         if (Array.isArray(arr)) {
+    //             // console.log("is array")
+    //             arr.sort(function(a, b) {
+    //                 return b.activity - a.activity;
+    //             });
+    //             // console.log(arr)
+    //             let userRank = arr.findIndex(
+    //                 item => item.username === thisComp.props.username
+    //             );
+    //             userRank += 1;
+    //             const total = arr.length;
+    //             // console.log(total)
+    //             // console.log("user rank: " +userRank )
+    //             const percentile = (total - userRank) / userRank;
+    //             thisComp.setState({
+    //                 rank: userRank,
+    //                 globalRank: percentile
+    //             });
+    //         }
+    //     });
+    // };
+
     calculatePercentileGlobal = () => {
         const thisComp = this;
-        API.getAllUsers().then(function(arr) {
+        API.getAllUsers().then(function (arr) {
             // console.log(arr.data)
             arr = arr.data;
             if (Array.isArray(arr)) {
                 // console.log("is array")
-                arr.sort(function(a, b) {
+                arr.sort(function (a, b) {
                     return b.activity - a.activity;
                 });
                 // console.log(arr)
                 let userRank = arr.findIndex(
                     item => item.username === thisComp.props.username
                 );
-                userRank += 1;
                 const total = arr.length;
                 // console.log(total)
                 // console.log("user rank: " +userRank )
-                const percentile = (total - userRank) / userRank;
+                // console.log("total: "+total)
+                // console.log("userRank: "+userRank)
+                const percentile = (total - userRank) / total;
+                // console.log("percentile" + percentile)
+                userRank += 1;
                 thisComp.setState({
                     rank: userRank,
                     globalRank: percentile
