@@ -33,7 +33,7 @@ class Friends extends Component {
 
     loadFriends = () => {
         const thisComp = this;
-        const userId = this.state.user.id;
+        const userId = cookies.get("user").id;
         API.displayFriends(userId).then(function(friends) {
             thisComp.setState({
                 friends: friends.data
@@ -43,7 +43,7 @@ class Friends extends Component {
 
     loadRequests = () => {
         const thisComp = this;
-        const userId = this.state.user.id;
+        const userId = cookies.get("user").id;
         API.displayRequests(userId).then(function(requests) {
             console.log(requests.data[0]);
             thisComp.setState({

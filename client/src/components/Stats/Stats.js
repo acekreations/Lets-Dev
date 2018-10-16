@@ -29,13 +29,14 @@ class Stats extends Component {
         arr.sort(function(a, b) {
             return a.activity - b.activity;
         });
-        const userRank = arr.findIndex(
+        let userRank = arr.findIndex(
             item => item.username === this.state.user.username
         );
-        const total = arr.length;
-        const percentile = (total - userRank) / userRank;
+        // const total = arr.length;
+        // const percentile = (total - userRank) / userRank;
+        userRank += 1;
         this.setState({
-            rank: percentile
+            rank: userRank
         });
     };
 
@@ -67,7 +68,7 @@ class Stats extends Component {
                         <h1 className="uk-margin-bottom">
                             {this.state.activity}
                         </h1>
-                        <p className="uk-text-meta">Actions</p>
+                        <p className="uk-text-meta">Activity</p>
                     </div>
                     <div>
                         <h1 className="uk-margin-bottom">
