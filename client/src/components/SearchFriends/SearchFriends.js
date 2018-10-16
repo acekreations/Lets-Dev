@@ -54,7 +54,7 @@ class SearchFriends extends Component {
                                     <img
                                         className="profileImage"
                                         alt="profile"
-                                        src={friend.imgUrl}
+                                        src={friend.imageUrl}
                                     />
                                 </td>
                                 <td className="uk-text-left table-80">

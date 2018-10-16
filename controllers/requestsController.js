@@ -71,7 +71,7 @@ module.exports = {
                         let friendObject = {
                             username: friend.username,
                             fullName: friend.fullName,
-                            imgUrl: friend.imageUrl,
+                            imageUrl: friend.imageUrl,
                             activity: friend.activity,
                             id: friend.id
                         };
