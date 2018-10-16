@@ -157,7 +157,7 @@ function runUpdates(
             );
         } else if (eventDay < checkedLast) {
             // calculates activity score
-            dailyActivityUpdate(checkedLast, userId, dailyActivityCount, res);
+            dailyActivityUpdate(checkedLast, userId, dailyActivityCount);
 
             dailyActivityCount = 1;
             checkedLast = eventDay;
@@ -177,7 +177,7 @@ function runUpdates(
 }
 
 // called third
-function dailyActivityUpdate(date, userId, activity, res) {
+function dailyActivityUpdate(date, userId, activity) {
     console.log(
         "::::::::::::::::::::::::::::::::::::CHECKPOINT 3.0::::::::::::::::::::::::::::::::::::"
     );
@@ -196,7 +196,7 @@ function dailyActivityUpdate(date, userId, activity, res) {
                 date: date
             }).then(() =>
                 // Rerun function
-                dailyActivityUpdate(date, userId, activity, res)
+                dailyActivityUpdate(date, userId, activity)
             );
         } else {
             // Check if UsersDays relationship exists
@@ -208,17 +208,9 @@ function dailyActivityUpdate(date, userId, activity, res) {
             }).then(userDay => {
                 //if not
                 if (!userDay) {
-                    createUserDay(day.id, userId, activity, res).then(
-                        response => {
-                            return response;
-                        }
-                    );
+                    createUserDay(day.id, userId, activity).then();
                 } else {
-                    updateUserDay(day.id, userId, activity, res).then(
-                        response => {
-                            return response;
-                        }
-                    );
+                    updateUserDay(day.id, userId, activity);
                 }
             });
         }
@@ -227,7 +219,7 @@ function dailyActivityUpdate(date, userId, activity, res) {
 
 // create user day relationship
 // called fourth
-function createUserDay(dayId, userId, activity, res) {
+function createUserDay(dayId, userId, activity) {
     console.log(
         "::::::::::::::::::::::::::::::::::::CHECKPOINT 4.0::::::::::::::::::::::::::::::::::::"
     );
@@ -246,13 +238,13 @@ function createUserDay(dayId, userId, activity, res) {
             }
         })
             .then(day => user.setDays([day]))
-            .then(res => updateUserDay(dayId, userId, activity, res))
+            .then(res => updateUserDay(dayId, userId, activity))
     );
 }
 
 // Update Activity for day
 // called fifth
-function updateUserDay(dayId, userId, activity, res) {
+function updateUserDay(dayId, userId, activity) {
     console.log(
         "::::::::::::::::::::::::::::::::::::CHECKPOINT 5.0::::::::::::::::::::::::::::::::::::"
     );
