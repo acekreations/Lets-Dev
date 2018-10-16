@@ -51,6 +51,8 @@ function updateNew(userId, res) {
         }
     }).then(user => {
         const username = user.username;
+        const per_page = 100;
+        const page = 1;
 
         octokit.activity
             .getEventsForUser({ username, per_page, page })

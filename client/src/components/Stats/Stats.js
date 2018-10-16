@@ -13,6 +13,7 @@ class Stats extends Component {
     componentDidMount() {
         this.calculatePercentileFriends();
         this.calculatePercentileGlobal();
+        this.getActions();
     }
 
     getActions = () => {
@@ -43,17 +44,19 @@ class Stats extends Component {
     calculatePercentileGlobal = () => {
         const thisComp = this;
         API.search("").then(function(arr) {
-            arr.sort(function(a, b) {
-                return a.activity - b.activity;
-            });
-            const userRank = arr.findIndex(
-                item => item.username === thisComp.state.user.username
-            );
-            const total = arr.length;
-            const percentile = (total - userRank) / userRank;
-            thisComp.setState({
-                globalRank: percentile
-            });
+            if (Array.isArray(arr)) {
+                arr.sort(function(a, b) {
+                    return a.activity - b.activity;
+                });
+                const userRank = arr.findIndex(
+                    item => item.username === thisComp.state.user.username
+                );
+                const total = arr.length;
+                const percentile = (total - userRank) / userRank;
+                thisComp.setState({
+                    globalRank: percentile
+                });
+            }
         });
     };
 
@@ -71,9 +74,7 @@ class Stats extends Component {
                         <p className="uk-text-meta">Activity</p>
                     </div>
                     <div>
-                        <h1 className="uk-margin-bottom">
-                            {this.state.rank * 100 + "%"}
-                        </h1>
+                        <h1 className="uk-margin-bottom">{this.state.rank}</h1>
                         <p className="uk-text-meta">Friends Rank</p>
                     </div>
                     <div>
