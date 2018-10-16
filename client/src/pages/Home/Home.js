@@ -15,7 +15,12 @@ class Home extends Component {
 
     componentDidMount() {
         this.checkLogin();
-        this.loadActivity(cookies.get("user").username);
+        API.compileActivity(cookies.get("user").id)
+            .then(res => {
+                console.log(res);
+                this.loadActivity(cookies.get("user").username);
+            })
+            .catch(err => console.log(err));
     }
 
     loadActivity = username => {
@@ -35,7 +40,7 @@ class Home extends Component {
                 user: user
             });
             console.log("cookies: ", cookies.get("user"));
-            this.getFriends(user);
+            this.getFriends(cookies.get("user"));
             //API.updateActivity(user.id);
         } else {
             window.location.replace("/");
@@ -53,6 +58,8 @@ class Home extends Component {
                 thisComp.setState({
                     friends: friends
                 });
+            } else {
+                console.log("friends is not an array");
             }
         });
     };

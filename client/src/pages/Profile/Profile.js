@@ -33,6 +33,7 @@ class Profile extends Component {
         const thisComp = this;
         API.getUserProfile(this.props.match.params.username).then(res => {
             console.log(res);
+            API.compileActivity(res.data.id);
             thisComp.setState({
                 profileOwner: res.data
             });

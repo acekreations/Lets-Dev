@@ -76,13 +76,7 @@ class Landing extends Component {
                 const userId = res.data.id;
                 API.updateNew(userId)
                     .then(res => {
-                        API.compileActivity(userId)
-                            .then(res => {
-                                window.location.replace("/home");
-                            })
-                            .catch(err => {
-                                console.log(err);
-                            });
+                        window.location.replace("/home");
                     })
                     .catch(err => {
                         console.log(err);
@@ -103,13 +97,7 @@ class Landing extends Component {
                 const userId = res.data.id;
                 API.checkUpdates(userId)
                     .then(res => {
-                        API.compileActivity(userId)
-                            .then(res => {
-                                window.location.replace("/home");
-                            })
-                            .catch(err => {
-                                console.log(err);
-                            });
+                        window.location.replace("/home");
                     })
                     .catch(err => {
                         console.log(err);
