@@ -17,8 +17,9 @@ class Stats extends Component {
     }
 
     getActions = () => {
+        const thisComp = this;
         API.getUserProfile(this.state.username).then(function(res) {
-            this.setState({
+            thisComp.setState({
                 activity: res.data.activity
             });
         });
@@ -74,6 +75,8 @@ class Stats extends Component {
                         <p className="uk-text-meta">Activity</p>
                     </div>
                     <div>
+                        <h1 className="uk-margin-bottom">{this.state.rank}</h1>
+                        <h1 className="uk-margin-bottom">{this.state.rank}</h1>
                         <h1 className="uk-margin-bottom">{this.state.rank}</h1>
                         <h1 className="uk-margin-bottom">{this.state.rank}</h1>
                         <p className="uk-text-meta">Friends Rank</p>
