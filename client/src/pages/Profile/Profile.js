@@ -18,36 +18,40 @@ class Profile extends Component {
     }
 
     checkLogin = () => {
+        const thisComp = this
         if (cookies.get("user")) {
             this.setState({
                 user: cookies.get("user")
             });
-            this.loadProfile();
+            this.loadProfile( thisComp );
         } else {
             window.location.replace("/");
         }
     };
 
-    loadProfile = () => {
+    loadProfile = ( thisComp ) => {
         console.log("loading profile");
-        const thisComp = this;
+        // const thisComp = this;
         API.getUserProfile(this.props.match.params.username).then(res => {
             console.log(res);
-            API.compileActivity(res.data.id);
+            // API.compileActivity(res.data.id);
             thisComp.setState({
                 profileOwner: res.data
             });
+            thisComp.getFriends(res.data.id)
         });
     };
 
-    getFriends = user => {
-        console.log(user);
+    getFriends = (userId) => {
+        console.log("getting friends")
         const thisComp = this;
-        API.displayFriends(user.id).then(function(friends) {
+        API.displayFriends(userId).then(function(friends) {
+            friends = friends.data;
             if (Array.isArray(friends)) {
                 friends.sort(function(a, b) {
-                    return a.activity - b.activity;
+                    return b.activity - a.activity;
                 });
+                console.log(friends)
                 thisComp.setState({
                     friends: friends
                 });
@@ -88,7 +92,8 @@ class Profile extends Component {
                     </ul>
                     <Stats
                         friends={this.state.friends}
-                        user={this.state.user}
+                        user={this.state.profileOwner}
+                        username={this.props.match.params.username}
                     />
                 </div>
             </div>

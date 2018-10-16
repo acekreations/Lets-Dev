@@ -16,22 +16,23 @@ class Rank extends Component {
                 <tbody>
                     {this.props.friends.map((item, index) => (
                         <tr key={index}>
-                            <td className="uk-width-auto">{item.fullName}</td>
+                            <td className="uk-width-auto">{index + 1}</td>
                             <td className="uk-width-auto">
                                 <img
                                     className="profileImage"
                                     alt="profile"
-                                    src={item.profileImage}
+                                    src={item.imageUrl}
                                 />
                             </td>
                             <td className="uk-width-expand uk-text-left">
                                 <Link
-                                    to={"/profile" + item.username}
+                                    to={"/profile/" + item.userName}
                                     className="uk-link-reset"
                                 >
                                     {item.fullName}
                                 </Link>
                             </td>
+                            <td className="uk-width-auto">{item.activity}</td>
                         </tr>
                     ))}
                 </tbody>

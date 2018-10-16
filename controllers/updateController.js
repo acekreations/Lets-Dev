@@ -75,7 +75,8 @@ function updateNew(userId, res) {
                     res
                 );
             });
-    });
+    })
+    .catch(err => (res.send(err)))
 }
 
 function checkForUpdate(userId, res) {
@@ -90,10 +91,10 @@ function checkForUpdate(userId, res) {
         var lastUpdate = convertDate(user.updatedAt);
 
         // If user has not been updated in the last day, run update
-        if (moment().subtract(1, "days") < moment(lastUpdate)) {
+        if (moment().subtract(1, "days") > moment(lastUpdate)) {
             initializeUpdate(user, userId, lastUpdate, res);
         } else {
-            res.json("No Update Necessary");
+            res.send("No Update Necessary");
         }
     });
 }
@@ -144,7 +145,7 @@ function runUpdates(
             eventsArray[0]
         } \n numberOfEvents: ${eventsArray.length}`
     );
-    if (lastUpdate <= checkedLast) {
+    if (lastUpdate <= checkedLast && eventsArray.length > 0) {
         let eventDay = convertDate(eventsArray[0].created_at);
         if (eventDay === checkedLast) {
             dailyActivityCount += 1;
@@ -174,7 +175,10 @@ function runUpdates(
             );
         }
     } else {
-        return res.json("complete");
+        // setTimeout(function(){
+            res.send("Updates complete");
+        // },
+        // 3000)
     }
 }
 
@@ -201,7 +205,7 @@ function dailyActivityUpdate(date, userId, activity) {
                 dailyActivityUpdate(date, userId, activity)
             );
         } else {
-            // Check if UsersDays relationship exists
+            // Check if User Day relationship exists
             db.UsersDays.findOne({
                 where: {
                     UserId: userId,
@@ -210,7 +214,7 @@ function dailyActivityUpdate(date, userId, activity) {
             }).then(userDay => {
                 //if not
                 if (!userDay) {
-                    createUserDay(day.id, userId, activity).then();
+                    createUserDay(day.id, userId, activity);
                 } else {
                     updateUserDay(day.id, userId, activity);
                 }

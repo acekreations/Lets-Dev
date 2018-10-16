@@ -4,6 +4,9 @@ export default {
     getUserProfile: function(username) {
         return axios.get("/api/users/" + username);
     },
+    getAllUsers: function() {
+        return axios.get("/api/users/");
+    },
     displayFriends: function(id) {
         return axios.get("/api/friends/" + id);
     },
