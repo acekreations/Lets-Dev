@@ -14,6 +14,10 @@ module.exports = {
             .catch(err => res.status(422).json(err));
     },
 
+    getAll: function(req, res) {
+        db.Users.findAll().then(user => res.json(user)).catch(err => res.status(422).json(err))
+    },
+
     findUsers: function(req, res) {
         console.log("searching users")
         console.log(req.params);
@@ -52,7 +56,7 @@ module.exports = {
                         let friendObject = {
                             userName: friend.username,
                             fullName: friend.fullName,
-                            imgUrl: friend.imageUrl,
+                            imageUrl: friend.imageUrl,
                             activity: friend.activity,
                             id: friend.id
                         };

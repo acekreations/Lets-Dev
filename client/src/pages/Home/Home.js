@@ -10,7 +10,8 @@ const cookies = new Cookies();
 class Home extends Component {
     state = {
         user: {},
-        friends: []
+        friends: [],
+        rank: []
     };
 
     componentDidMount() {
@@ -23,24 +24,31 @@ class Home extends Component {
             .catch(err => console.log(err));
     }
 
+    createRank = (cb) => {
+        this.setState({
+            rank: this.state.rank.concat(this.state.user)
+        });
+        cb(cookies.get("user"));
+    }
+
     loadActivity = username => {
         const thisComp = this;
         API.getUserProfile(username).then(res => {
-            console.log(res);
             thisComp.setState({
+                user: res.data,
                 activity: res.data.activity
             });
+            this.createRank(this.getFriends);
         });
     };
 
     checkLogin = () => {
         if (cookies.get("user")) {
             const user = cookies.get("user");
-            this.setState({
-                user: user
-            });
-            console.log("cookies: ", cookies.get("user"));
-            this.getFriends(cookies.get("user"));
+            // this.setState({
+            //     user: user
+            // });
+            // this.getFriends(cookies.get("user"));
             //API.updateActivity(user.id);
         } else {
             window.location.replace("/");
@@ -48,15 +56,16 @@ class Home extends Component {
     };
 
     getFriends = user => {
-        console.log(user);
         const thisComp = this;
-        API.displayFriends(user.id).then(function(friends) {
-            if (Array.isArray(friends)) {
-                friends.sort(function(a, b) {
-                    return a.activity - b.activity;
+        API.displayFriends(cookies.get("user").id).then(function(friends) {
+            if (Array.isArray(friends.data)) {
+                let newArray = thisComp.state.rank.concat(friends.data)
+                let rank = newArray.sort(function(a, b) {
+                    return b.activity - a.activity;
                 });
                 thisComp.setState({
-                    friends: friends
+                    friends: friends.data,
+                    rank: rank
                 });
             } else {
                 console.log("friends is not an array");
@@ -76,11 +85,10 @@ class Home extends Component {
                     <Stats
                         friends={this.state.friends}
                         user={this.state.user}
-                        rank={this.state.rank * 100 + "%"}
-                        globalRank={this.state.globalRank * 100 + "%"}
+                        username={cookies.get("user").username}
                     />
                     <div className="uk-section uk-section-default uk-margin-large-top uk-padding-remove">
-                        <Rank friends={this.state.friends} />
+                        <Rank friends={this.state.rank} />
                     </div>
                 </div>
             </div>

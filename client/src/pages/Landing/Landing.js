@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./Landing.css";
 import { Animated } from "react-animated-css";
 import { Cookies } from "react-cookie";
-import { queryString } from "query-string";
+// import { queryString } from "query-string";
 import API from "../../utils/API";
 
 const cookies = new Cookies();
@@ -76,7 +76,7 @@ class Landing extends Component {
                 const userId = res.data.id;
                 API.updateNew(userId)
                     .then(res => {
-                        window.location.replace("/home");
+                        this.props.history.replace("/home");
                     })
                     .catch(err => {
                         console.log(err);

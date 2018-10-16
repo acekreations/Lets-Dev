@@ -1,60 +1,101 @@
 import React, { Component } from "react";
 import API from "../../utils/API";
+import { Cookies } from "react-cookie";
+const cookies = new Cookies();
 
 class Stats extends Component {
     state = {
         rank: 0,
         globalRank: 0,
         activity: 0,
-        friends: this.props.friends,
-        user: this.props.user
+        friends: []
     };
 
     componentDidMount() {
-        this.calculatePercentileFriends();
+        this.loadActivity(this.props.username);
         this.calculatePercentileGlobal();
-        this.getActions();
+        // this.calculatePercentileFriends(this.props.friends);
     }
 
-    getActions = () => {
+    // componentWillReceiveProps(nextProps){
+    //     if(nextProps.user !== this.props.user){
+    //         console.log(this.props.user)
+    //         this.getFriends(this.props.user.id);
+    //     }
+    // }
+
+    // getFriends = (userId) => {
+    //     const thisComp = this;
+    //     // API.getUserProfile(this.props.username).then(user => {
+
+    //     // })
+    //     API.displayFriends(1).then(function (friends) {
+    //         if (Array.isArray(friends.data)) {
+    //             console.log(friends.data)
+    //             friends.data.sort(function (a, b) {
+    //                 return b.activity - a.activity;
+    //             });
+    //             thisComp.setState({
+    //                 friends: friends.data
+    //             });
+    //             this.calculatePercentileFriends(friends.data);
+    //         } else {
+    //             console.log("friends is not an array");
+    //         }
+    //     });
+    // };
+
+    loadActivity = username => {
         const thisComp = this;
-        API.getUserProfile(this.state.username).then(function(res) {
+        API.getUserProfile(username).then(res => {
             thisComp.setState({
                 activity: res.data.activity
             });
         });
     };
 
-    calculatePercentileFriends = () => {
-        const arr = this.state.friends;
-        arr.push(this.state.user);
-        arr.sort(function(a, b) {
-            return a.activity - b.activity;
-        });
-        let userRank = arr.findIndex(
-            item => item.username === this.state.user.username
-        );
-        // const total = arr.length;
-        // const percentile = (total - userRank) / userRank;
-        userRank += 1;
-        this.setState({
-            rank: userRank
-        });
-    };
+    // calculatePercentileFriends = (arr) => {
+    //     // console.log("props ", this.props.friends);
+    //     //const arr = this.props.friends;
+    //     console.log("friends: ", arr);
+    //     console.log(this.props.user);
+    //     arr.push(this.props.user);
+    //     console.log("post push: ", arr)
+    //     arr.sort(function(a, b) {
+    //         return b.activity - a.activity;
+    //     });
+    //     console.log("post sort: ", arr)
+    //     let userRank = arr.findIndex(
+    //         item => item.username === this.props.username
+    //     );
+    //     userRank += 1;
+    //     console.log("user rank: " +userRank )
+    //     this.setState({
+    //         rank: userRank
+    //     });
+    // };
 
     calculatePercentileGlobal = () => {
         const thisComp = this;
-        API.search("").then(function(arr) {
+        API.getAllUsers().then(function(arr) {
+            // console.log(arr.data)
+            arr = arr.data;
             if (Array.isArray(arr)) {
+                // console.log("is array")
                 arr.sort(function(a, b) {
-                    return a.activity - b.activity;
+                    return b.activity - a.activity;
                 });
-                const userRank = arr.findIndex(
-                    item => item.username === thisComp.state.user.username
+                // console.log(arr)
+                let userRank = arr.findIndex(
+                    item => item.username === thisComp.props.username
                 );
+                userRank += 1;
                 const total = arr.length;
+                // console.log(total)
+                // console.log("user rank: " +userRank )
                 const percentile = (total - userRank) / userRank;
                 thisComp.setState({
+                    rank: userRank,
                     globalRank: percentile
                 });
             }
@@ -76,16 +117,13 @@ class Stats extends Component {
                     </div>
                     <div>
                         <h1 className="uk-margin-bottom">{this.state.rank}</h1>
-                        <h1 className="uk-margin-bottom">{this.state.rank}</h1>
-                        <h1 className="uk-margin-bottom">{this.state.rank}</h1>
-                        <h1 className="uk-margin-bottom">{this.state.rank}</h1>
-                        <p className="uk-text-meta">Friends Rank</p>
+                        <p className="uk-text-meta">Global Rank</p>
                     </div>
                     <div>
                         <h1 className="uk-margin-bottom">
                             {this.state.globalRank * 100 + "%"}
                         </h1>
-                        <p className="uk-text-meta">Global Rank</p>
+                        <p className="uk-text-meta">Global Percentile</p>
                     </div>
                 </div>
             </div>
