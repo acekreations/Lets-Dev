@@ -104,25 +104,26 @@ class Stats extends Component {
 
     calculatePercentileGlobal = () => {
         const thisComp = this;
-        API.getAllUsers().then(function (arr) {
+        API.getAllUsers().then(function(arr) {
             // console.log(arr.data)
             arr = arr.data;
             if (Array.isArray(arr)) {
                 // console.log("is array")
-                arr.sort(function (a, b) {
+                arr.sort(function(a, b) {
                     return b.activity - a.activity;
                 });
-                // console.log(arr)
+                console.log(arr);
                 let userRank = arr.findIndex(
                     item => item.username === thisComp.props.username
                 );
                 const total = arr.length;
-                // console.log(total)
-                // console.log("user rank: " +userRank )
-                // console.log("total: "+total)
-                // console.log("userRank: "+userRank)
-                const percentile = (total - userRank) / total;
-                // console.log("percentile" + percentile)
+                // console.log(total);
+                // console.log("user rank: " + userRank);
+                // console.log("total: " + total);
+                // console.log("userRank: " + userRank);
+                let percentile = (total - userRank) / total;
+                percentile = percentile.toFixed(4);
+                // console.log("percentile" + percentile);
                 userRank += 1;
                 thisComp.setState({
                     rank: userRank,
