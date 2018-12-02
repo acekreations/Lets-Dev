@@ -29,5 +29,8 @@
         "request": "^2.88.0",
         "require": "^2.4.20",
         "sequelize": "^4.39.0"
+    },
+    "resolutions": {
+        "**/event-stream": "^4.0.1"
     }
 }
