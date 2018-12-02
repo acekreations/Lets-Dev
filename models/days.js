@@ -1,15 +1,15 @@
 module.exports = (sequelize, DataTypes) => {
     const Days = sequelize.define('Days', {
-      date: {
-          type: DataTypes.DATEONLY,
-          unique: true
+        date: {
+            type: DataTypes.DATEONLY
+        },
+        events: {
+            type: DataTypes.INTEGER
         }
     });
   
     Days.associate = (models) => {
-        Days.belongsToMany(models.Users, {
-            through: {model: models.UsersDays}
-        })
+        Days.belongsTo(models.Users)
     };
   
     return Days;
