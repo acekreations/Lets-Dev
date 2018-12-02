@@ -112,18 +112,18 @@ class Stats extends Component {
                 arr.sort(function(a, b) {
                     return b.activity - a.activity;
                 });
-                // console.log(arr)
+                console.log(arr);
                 let userRank = arr.findIndex(
                     item => item.username === thisComp.props.username
                 );
                 const total = arr.length;
-                // console.log(total)
-                // console.log("user rank: " +userRank )
-                // console.log("total: "+total)
-                // console.log("userRank: "+userRank)
+                // console.log(total);
+                // console.log("user rank: " + userRank);
+                // console.log("total: " + total);
+                // console.log("userRank: " + userRank);
                 let percentile = (total - userRank) / total;
-                percentile = percentile.toFixed(2);
-                // console.log("percentile" + percentile)
+                percentile = percentile.toFixed(4);
+                // console.log("percentile" + percentile);
                 userRank += 1;
                 thisComp.setState({
                     rank: userRank,
