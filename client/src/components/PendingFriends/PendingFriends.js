@@ -2,11 +2,13 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import API from "../../utils/API";
 import { Cookies } from "react-cookie";
+import UIkit from "uikit";
 
 const cookies = new Cookies();
 
 class PendingFriends extends Component {
     acceptRequest = arg => {
+        const thisComp = this;
         // grab from cookie
         const user = cookies.get("user");
         const userId = user.id;
@@ -17,7 +19,15 @@ class PendingFriends extends Component {
             friendId: friendId
         };
         console.log(data);
-        API.acceptRequest(data).then(function(result) {});
+        API.acceptRequest(data).then(function(result) {
+            thisComp.props.loadFriends();
+            thisComp.props.loadRequests();
+            UIkit.notification({
+                message: "Friend request accepted!",
+                pos: "top-center",
+                timeout: 3000
+            });
+        });
     };
 
     render() {

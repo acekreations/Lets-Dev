@@ -26,7 +26,12 @@ class Rank extends Component {
                             </td>
                             <td className="uk-width-expand uk-text-left">
                                 <Link
-                                    to={"/profile/" + item.userName}
+                                    // {item.userName ? item.userName : item.username}
+                                    to={
+                                        item.userName
+                                            ? `/profile/${item.userName}`
+                                            : `/profile/${item.username}`
+                                    }
                                     className="uk-link-reset"
                                 >
                                     {item.fullName}

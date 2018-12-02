@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import "./SearchPeopleResults.css";
 import API from "../../utils/API";
 import { Cookies } from "react-cookie";
+import UIkit from "uikit";
 
 const cookies = new Cookies();
 
@@ -17,7 +18,13 @@ class SearchPeopleResults extends Component {
             userId: userId,
             friendId: friendId
         };
-        API.createRequest(data).then(function(result) {});
+        API.createRequest(data).then(function(result) {
+            UIkit.notification({
+                message: "Friend request sent!",
+                pos: "top-center",
+                timeout: 3000
+            });
+        });
     };
 
     render() {
@@ -40,7 +47,7 @@ class SearchPeopleResults extends Component {
                 </td>
                 <td className="uk-text-center table-10">
                     <div onClick={() => this.createRequest(this.props.id)}>
-                        <span uk-icon="plus" />
+                        <span className="request-btn" uk-icon="plus" />
                     </div>
                 </td>
             </tr>
