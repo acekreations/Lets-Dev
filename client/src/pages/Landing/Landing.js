@@ -17,6 +17,9 @@ class Landing extends Component {
         this.typeTagLine();
         if (!cookies.get("user")) {
             this.handleAuth();
+        } else {
+            const user = cookies.get("user");
+            this.login(user.username);
         }
     }
 
@@ -91,13 +94,16 @@ class Landing extends Component {
     };
 
     login = username => {
+        const thisComp = this;
+        console.log("login starting");
+        console.log(username);
         API.login(username)
             .then(function(res) {
                 //if success, store info in cookie
                 const userId = res.data.id;
                 API.checkUpdates(userId)
                     .then(res => {
-                        window.location.replace("/home");
+                        thisComp.props.history.replace("/home");
                     })
                     .catch(err => {
                         console.log(err);
@@ -151,13 +157,13 @@ class Landing extends Component {
                         </div>
                         <div className="uk-flex uk-flex-middle uk-flex-right">
                             <Animated animationIn="flipInX">
-                                <button
+                                <a
                                     className="landingBtn"
-                                    onClick={this.signup}
+                                    href="https://github.com/login/oauth/authorize?client_id=9988a9f4ea38fbb0c35e"
                                 >
                                     Sign Up With GitHub{" "}
                                     <span uk-icon="icon: github" />
-                                </button>
+                                </a>
                             </Animated>
                         </div>
                     </div>
