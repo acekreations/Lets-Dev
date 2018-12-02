@@ -27,9 +27,7 @@ module.exports = (sequelize, DataTypes) => {
             as: "Friends",
             through: "Friendships"
         }),
-            Users.belongsToMany(models.Days, {
-                through: { model: models.UsersDays }
-            });
+        Users.hasMany(models.Days);
     };
 
     return Users;
