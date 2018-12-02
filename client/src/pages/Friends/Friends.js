@@ -62,7 +62,11 @@ class Friends extends Component {
                 />
                 <div className="uk-container uk-container-xsmall">
                     {this.state.requests.length > 0 && (
-                        <PendingFriends requests={this.state.requests} />
+                        <PendingFriends
+                            requests={this.state.requests}
+                            loadFriends={this.loadFriends}
+                            loadRequests={this.loadRequests}
+                        />
                     )}
 
                     <SearchPeople friends={this.state.friends} />
