@@ -173,12 +173,16 @@ function runUpdates(
                 userId,
                 res
             );
+        } else {
+            updateActivityScore(userId, res)
+            return res
         }
     } else {
-        // setTimeout(function(){
-            res.send("Updates complete");
-        // },
-        // 3000)
+        setTimeout(function(){
+            updateActivityScore(userId, res)
+        },
+        3000)
+        return res
     }
 }
 
