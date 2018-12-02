@@ -265,7 +265,7 @@ function compoundActivity(array) {
     );
     let activityScore = 0;
     array.forEach(element => {
-        console.log(date);
+        console.log(element.date);
         activityScore += element.events;
     });
     return activityScore;
