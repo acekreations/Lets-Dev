@@ -173,7 +173,9 @@ function runUpdates(
                 userId,
                 res
             );
-        }
+        } else (
+            res.send("Updates Complete")
+        )
     } else {
         // setTimeout(function(){
             res.send("Updates complete");
