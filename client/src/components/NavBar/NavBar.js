@@ -52,12 +52,12 @@ class NavBar extends Component {
                 <div className="uk-navbar-right">
                     <ul className="uk-navbar-nav uk-flex-middle">
                         <li>
-                            <Link
-                                to={"/profile/" + this.props.username}
+                            <a
+                                href={"/profile/" + this.props.username}
                                 className="uk-link-reset"
                             >
                                 {this.props.fullName}
-                            </Link>
+                            </a>
                         </li>
                         <li>
                             <img

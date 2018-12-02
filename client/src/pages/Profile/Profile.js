@@ -18,18 +18,18 @@ class Profile extends Component {
     }
 
     checkLogin = () => {
-        const thisComp = this
+        const thisComp = this;
         if (cookies.get("user")) {
             this.setState({
                 user: cookies.get("user")
             });
-            this.loadProfile( thisComp );
+            this.loadProfile(thisComp);
         } else {
             window.location.replace("/");
         }
     };
 
-    loadProfile = ( thisComp ) => {
+    loadProfile = thisComp => {
         console.log("loading profile");
         // const thisComp = this;
         API.getUserProfile(this.props.match.params.username).then(res => {
@@ -38,12 +38,12 @@ class Profile extends Component {
             thisComp.setState({
                 profileOwner: res.data
             });
-            thisComp.getFriends(res.data.id)
+            thisComp.getFriends(res.data.id);
         });
     };
 
-    getFriends = (userId) => {
-        console.log("getting friends")
+    getFriends = userId => {
+        console.log("getting friends");
         const thisComp = this;
         API.displayFriends(userId).then(function(friends) {
             friends = friends.data;
@@ -51,7 +51,7 @@ class Profile extends Component {
                 friends.sort(function(a, b) {
                     return b.activity - a.activity;
                 });
-                console.log(friends)
+                console.log(friends);
                 thisComp.setState({
                     friends: friends
                 });
@@ -67,7 +67,7 @@ class Profile extends Component {
                     username={this.state.user.username}
                     profileImage={this.state.user.imageUrl}
                 />
-                <div className="uk-flex uk-flex-column uk-flex-middle">
+                <div className="uk-container uk-container-xsmall uk-flex uk-flex-column uk-flex-middle">
                     <img
                         className="profileImageLg uk-margin-large-top"
                         alt="profile"
