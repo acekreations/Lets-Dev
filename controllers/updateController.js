@@ -183,84 +183,91 @@ function runUpdates(
 }
 
 // called third
-function dailyActivityUpdate(date, userId, activity) {
+function dailyActivityUpdate(date, userId, events) {
     console.log(
         "::::::::::::::::::::::::::::::::::::CHECKPOINT 3.0::::::::::::::::::::::::::::::::::::"
     );
     console.log(
-        `date: ${date} \n userId: ${userId} \n activity: ${activity} \n `
+        `date: ${date} \n userId: ${userId} \n events: ${events} \n `
     );
     // Check if Day exists for user
     db.Days.findOne({
         where: {
-            id: userId,
+            UserId: userId,
             date: date
         }
+    }).then(day => {
+        if (!day) { 
+            // Creates row in Days Table, associated User, listing events
+            console.log(`Inserting ${date} for User ${userId} with ${events} recognized events`)
+            db.Days.create({
+                date: date,
+                UserId: userId,
+                events: events
+            }).then(res => {
+                return res
+            })
+        } else {
+            // updates events on different row
+            console.log(`setting number of events as ${events} on ${date} for User ${userId}`)
+            day.updateAttributes({
+                events: events
+            }).then(res => {
+                return res
+            })
+        }
     })
-    
-        // if not
-             //Create Day associated with user, with activity score for 'events' 
-             createUserDay(date, userId, activity) 
-        // if it does
-             // update events to match activity score 
-             updateUserDay(date, userId, activity)
-    
 }
 
-// create user day relationship
-// called fourth
-// function createUserDay(date, userId, activity) {
-//     console.log(
-//         "::::::::::::::::::::::::::::::::::::CHECKPOINT 4.0::::::::::::::::::::::::::::::::::::"
-//     );
-//     console.log(
-//         `dayId: ${dayId} \n userId: ${userId} \n activity: ${activity} \n `
-//     );
-
-
-// }
-
-// // Update Activity for day
-// // called fifth
-// function updateUserDay(dayId, userId, activity) {
-//     console.log(
-//         "::::::::::::::::::::::::::::::::::::CHECKPOINT 5.0::::::::::::::::::::::::::::::::::::"
-//     );
-//     console.log(
-//         `dayId: ${dayId} \n userId: ${userId} \n activity: ${activity} \n `
-//     );
-
-// }
-
+// Called Last
 // Generate a user's activity score
 function updateActivityScore(userId, res) {
     console.log(
-        "::::::::::::::::::::::::::::::::::::CHECKPOINT 6.0::::::::::::::::::::::::::::::::::::"
+        "::::::::::::::::::::::::::::::::::::CHECKPOINT 4.0::::::::::::::::::::::::::::::::::::"
     );
     console.log(`userId: ${userId} \n`);
-    
+    db.Days.findAll({
+        where: {
+            UserId: userId,
+            date: {
+                $gte: convertDate(moment().subtract(30, "days"))
+            }
+        }
+    }).then(result => {
+        console.log("array of days")
+        console.log(result)
+        const update = async () => {
+            // calculates activity score
+            const activityScore = await compoundActivity(result);
+
+            db.Users.update(
+                {
+                    activity: activityScore
+                },
+                {
+                    where: {
+                        id: userId
+                    }
+                }
+            ).then(finalResult =>
+                // res.json(finalResult)
+                res.json(finalResult)
+            );
+        };
+        update();
+    })
 }
 
-// function compoundActivity(array) {
-//     console.log(
-//         "::::::::::::::::::::::::::::::::::::CHECKPOINT 6.1::::::::::::::::::::::::::::::::::::"
-//     );
-
-//     //Increment activity score for each entry for the last 30 days
-//     let stopPoint = moment().subtract(30, "days");
-//     let activityScore = 0;
-//     array.forEach(element => {
-//         let date = convertDate(element.Day.dataValues.date);
-//         console.log(date);
-//         if (moment(date) > moment(stopPoint)) {
-//             activityScore += element.activity;
-//         } else if (
-//             moment(date) === moment(stopPoint) ||
-//             array.indexOf(element) === array.length - 1
-//         ) {
-//             activityScore += element.activity;
-//         }
-//     });
-//     return activityScore;
-//     // update with final activity score
-// }
+// Compounds the activity score
+function compoundActivity(array) {
+    console.log(
+        "::::::::::::::::::::::::::::::::::::CHECKPOINT 5.0::::::::::::::::::::::::::::::::::::"
+    );
+    let activityScore = 0;
+    array.forEach(element => {
+        console.log(date);
+        activityScore += element.events;
+    });
+    return activityScore;
+    // update with final activity score
+}
