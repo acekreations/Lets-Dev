@@ -14,7 +14,7 @@ if (process.env.NODE_ENV === "production") {
 }
 //commented out because it throws err until there are models
 
-db.sequelize.sync({force: true}).then(function() {
+db.sequelize.sync().then(function() {
     app.listen(PORT, function() {
         console.log(`Listening on port ${PORT}`);
     });
