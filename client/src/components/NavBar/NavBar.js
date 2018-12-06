@@ -7,7 +7,7 @@ const cookies = new Cookies();
 class NavBar extends Component {
     handleLogout = () => {
         cookies.remove("user", { path: "/" });
-        this.props.history.replace("/");
+        window.location.replace("/");
     };
 
     render() {
